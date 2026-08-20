@@ -37,6 +37,20 @@ export default defineNuxtConfig({
     transpile: ["vuetify"],
   },
 
+  nitro: {
+    azure: {
+      config: {
+        // Nitro's azure-swa preset only recognises the literal strings "16",
+        // "18" and "20" in package.json `engines.node`; anything else (such as
+        // "22.x") silently falls back to `node:18`, which Azure Static Web Apps
+        // retired on 31 May 2025. Set the API runtime explicitly instead.
+        platform: {
+          apiRuntime: "node:22",
+        },
+      },
+    },
+  },
+
   modules: [
     "@nuxtjs/i18n",
     "@nuxt/image",
