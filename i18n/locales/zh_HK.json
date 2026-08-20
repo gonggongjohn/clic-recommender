@@ -1,0 +1,81 @@
+{
+  "title": "社區法網推薦系統",
+  "lawtech": "法律與科技研究中心",
+
+  "meta_description": "社區法網推薦系統。告訴我們您的情況並向我們詢問任何法律問題，全部由AI提供支援",
+  "meta_keywords": "社區法網、社區法網推薦人、青年社區法網、老年社區法網、家庭法網、人工智慧律師、香港大學",
+
+  "nav_title": "內容推薦系統",
+  "nav_home": "首頁",
+  "nav_about": "關於我們",
+  "nav_howto": "如何使用",
+  "nav_terms": "使用條款",
+  "nav_disclaimer": "免責聲明",
+  "nav_feedback": "意見",
+
+  "footer_btn": "前往社區法網",
+  "footer_disclaimer": "社區法網提供的資料只供初步參考，而有關資料並非正式法律意見。閣下如欲就任何法律事項取得更詳盡的資料或支援服務，須諮詢閣下的律師。",
+  "footer_copyright": "香港大學社區法網 版權所有 ©2024",
+
+  "recommender_slogan": "釋放社區法網的力量： 針對你的情況推薦內容",
+  "recommender_name": "社區法網內容推薦系統",
+  "recommender_instructions": "按照以下步驟獲取與你的情況相關的社區法網內容。",
+  "recommender_tip_title": "使用技巧",
+  "recommender_tips": [
+    "如果你用句子和段落來寫，推薦器會表現最好",
+    "您無需編寫問題即可實現此功能"
+  ],
+  "recommender_samples_step1_main_title": "快速啟動範例",
+  "recommender_samples_step1_titles": [
+    "這樣違法嗎？",
+    "我如何正確地做",
+    "我很擔心這個..."
+  ],
+  "recommender_step1_samples": [
+    "最近看到有人錄製了電視劇《殭屍的故事》，但這部劇是由TVB製作的。直接在家中錄製電視播放的電視劇，這樣做是否侵犯了版權呢？",
+    "商業用途上 —— 複印他人身份證。我需要立即在複印件上蓋上「複印件」字樣嗎？\n哪些法律或規定對此有所規定？",
+    "公司安裝了閉路電視（CCTV）。\n我在詢問一位在船上工作的朋友的情況。公司安裝了CCTV，聲稱它可以監視所有角落。\n我的朋友在船上工作，但辦公樓經常將CCTV轉向船艙，為了安全原因監視我朋友在船艙內的活動。\n這是否侵犯了個人隱私？",
+    "隔壁的香味實在是太臭、難以忍受了。我本以為終於能在一個30年的私人住宅區買到房子，我想只要不是鬼屋應該就沒問題，但誰知道我樓層的人都瘋了。總有人用力地關門，一天要開關無數次（他們已經進了屋，我實在不明白為什麼還要那麼用力地開關門。我的孩子都被聲音吵醒好幾次。我投訴過但沒用）。另一邊，隔壁的鄰居一天燒香三次，早中晚，比我吃飯還勤。實在是受不了。基本上每次我出門，他們就巧合地開始燒香。我家裡已經放了很多海綿和空氣淨化器。但當我稍微打開門出去的時候，那味道就會進入我的房子。最糟糕的是，他們燒完香就會關門。如果他們那麼喜歡，應該在自己門前享受那個味道。在門口燒香完全沒有意義。如果他們家變成寺廟那是他們的事。問題是他們總是在門口燒香，而且走廊沒有通風，我就住在旁邊，實在是受不了。你有沒有相同的經驗或解決方案？"
+  ],
+  "recommender_step1_title": "描述你的情況",
+  "recommender_step1_desc": "寫下你的情況或提出法律問題",
+  "recommender_step1_input": "請輸入場景...",
+  "recommender_step1_btn": "繼續",
+
+  "recommender_step2_title": "選擇主題",
+  "recommender_step2_desc": "點擊選擇你認為相關的主題",
+  "recommender_step2_btn": "獲得建議",
+  
+  "recommender_step3_title": "獲取並訪問推薦",
+  "recommender_step3_desc": "您的情況可能會透過以下社區法網頁面（由下面的模型問題表示）得到解決。 按一下可存取相關的 CLIC 頁面或段落。",
+  "recommender_step3_question": "問題",
+  "recommender_step3_awnser": "社區法網的相關摘錄自",
+  "recommender_step3_expand": "預覽社區法網的相關摘錄",
+  "recommender_step3_collapse": "展示更少",
+  "recommender_step3_visit": "訪問社區法網頁面",
+  "recommender_step3_feedback": "這個建議有幫助嗎？",
+  "recommender_step3_restart": "重新開始",
+  "recommender_step3_tostep1": "返回並編輯步驟 1",
+  "recommender_search_working_title": "正在尋找相關問題…...",
+  "recommender_search_working_desc": "我們正在尋找與您的情況相關的問題。",
+  "recommender_search_waking_title": "正在準備搜尋服務...",
+  "recommender_search_waking_desc": "搜尋服務可能剛從閒置狀態啟動。首次搜尋可能需要稍長一些時間來準備搜尋索引，之後的搜尋通常會更快。",
+  "recommender_search_error": "無法完成搜尋，請稍後再試。",
+
+  "about_rationale_title": "它是如何運作的？",
+  "about_rationale_explain_pt1": "Place holder",
+  "about_rationale_explain_pt2": "Place holder",
+  "about_team_title": "成員",
+  "about_ack_title": "鳴謝",
+  "about_ack": "我們亦謹向以下曾為本項目提供協助的學生致謝：",
+
+  "terms_disclaimer_title": "免責聲明",
+  "terms_privacy_title": "隱私權政策",
+  "terms_usage_title": "使用條款",
+
+  "start_title": "向我們詢問任何法律問題",
+  "start_btn": "現在開始",
+
+  "showmore": "展示更多",
+  "collapse": "展示更少"
+}

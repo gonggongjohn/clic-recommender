@@ -1,0 +1,82 @@
+{
+  "title": "CLIC Recommender",
+  "lawtech": "Law & Technology Centre",
+  "meta_description": "CLIC Recommender.Tell us about your situation and ask us any legal matters, all powered by AI",
+  "meta_keywords": "CLIC, CLIC Recommender, Youth CLIC, Senior CLIC, Family CLIC, AI Lawyer, HKU",
+  "nav_title": "Recommender",
+  "nav_home": "Home",
+  "nav_about": "About Us",
+  "nav_howto": "How to use",
+  "nav_terms": "Terms of Use",
+  "nav_disclaimer": "Disclaimer",
+  "nav_feedback": "Feedback",
+  "footer_btn": "Go to CLIC",
+  "footer_disclaimer": "The information available at the Community Legal Information Centre (CLIC) is for preliminary reference only and should NOT be considered as legal advice. You should consult your own lawyer if you want to obtain further information or legal assistance concerning any specific legal matter.",
+  "footer_copyright": "Copyright © 2024. Community Legal Information Centre (CLIC), The University of Hong Kong. All Rights Reserved.",
+  
+  "recommender_slogan": "Unlock CLIC's Power: Recommended Pages for Your Situation",
+  "recommender_name": "The CLIC Recommender",
+  "recommender_instructions": "Follow the steps below to get a list of recommended pages from CLIC relevant to your situation.",
+  
+  "recommender_tip_title": "Usage Tips",
+  "recommender_tips": [
+    "The recommender performs best if you write in sentences and paragraphs",
+    "You do not need to write a question for this to work"
+  ],
+  
+  "recommender_samples_step1_main_title": "Jumpstart Examples",
+  "recommender_samples_step1_titles": [
+    "Is this illegal?",
+    "How can I do this properly",
+    "I am worried about this..."
+  ],
+  "recommender_step1_samples": [
+    "Recently saw someone videotaped the TV series \"Story of Zom-B\", but \"Story of Zom-B\" was produced by TVB. Does it infringe copyright by directly videotaping the TV series that are broadcast on TV at home?",
+    "On business -- photocopying other people's ID cards. Do I have to stamp the word \"copy\" immediately?\nWhich laws/regulations provide for this? ",
+    "The company installs CCTV\nI’m asking for a friend who works on a ship. The company installed a CCTV, claiming that it can all angles\nMy friend works on the ship, but the office building often turns CCTV to look down to the ship's cabin to see what my friend is doing in the cabin for security reasons.\nIs it infringing personal privacy???",
+    "The incense next door is really stinky and unbearable I thought I could finally get a house in a 30-year-old private housing estate I thought it would be okay if it is not a haunted house, but little did I know the people who lived on my floor were crazy. Someone always forcefully closes the door. They keep opening and closing the door dozens of times a day (they have already entered the house, so I have no idea why do they keep opening and closing the door with great force. My child was woken up by the sound several times. I’ve complained but it doesn’t work) On the other side, the flat next door light the incense three times a day, in the morning, afternoon and evening, even more frequent than my meals It's really unbearable. Basically, every time I go out they coincidentally start incensing. I've already placed a lot of sponges and used air purifiers in the house. But the smell would go into my house when I open the door slightly to go out. The worst thing is when they finished lighting the incense they would close their door. If they like it so much they should enjoy the smell in front of their door. It is a completely meaningless thing to light incense. It's none of my business if their house becomes a temple. The problem is that they always light the incense at the door but the corridor is not ventilated and I am living next door, which is really unbearable. Do you have the same experience or solutions?"
+  ],
+
+  "recommender_step1_title": "Describe your situation",
+  "recommender_step1_desc": "Write about your situation or ask a legal question",
+  "recommender_step1_input": "Type your situation here...",
+  "recommender_step1_btn": "Continue",
+
+  "recommender_step2_title": "Choose topics",
+  "recommender_step2_desc": "Click to select the topics that you consider relevant",
+  "recommender_step2_btn": "get recommendations",
+  
+  "recommender_step3_title": "Get and visit recommendations",
+  "recommender_step3_desc": "Your scenario might be addressed by the following CLIC pages represented by the model questions below. Click to visit the relevant CLIC pages or paragraphs.",
+  "recommender_step3_question": "Question",
+  "recommender_step3_awnser": "RELEVANT EXCERPT FROM CLIC",
+  "recommender_step3_expand": "Preview relevant excerpt from CLIC",
+  "recommender_step3_collapse": "Collapse preview",
+  "recommender_step3_visit": "visit page",
+  "recommender_step3_feedback": "Is this recommendation helpful?",
+  "recommender_step3_restart": "Restart",
+  "recommender_step3_tostep1": "Go back and Edit Step 1",
+
+  "recommender_search_working_title": "Finding relevant questions...",
+  "recommender_search_working_desc": "We're searching for questions that match your situation.",
+  "recommender_search_waking_title": "Preparing the search service...",
+  "recommender_search_waking_desc": "The search service may be starting after a period of inactivity. The first search can take a little longer while the search index is prepared; later searches should be much faster.",
+  "recommender_search_error": "We couldn't complete the search. Please try again.",
+
+  "about_rationale_title": "How does it work?",
+  "about_rationale_explain_pt1": "Place holder",
+  "about_rationale_explain_pt2": "Place holder",
+  "about_team_title": "Members",
+  "about_ack_title": "Acknowledgement",
+  "about_ack": "We wish to acknowledge and thank the following students for their assistance with the project:",
+
+  "terms_disclaimer_title": "Disclaimer",
+  "terms_privacy_title": "Privacy Policy",
+  "terms_usage_title": "Usage Policy",
+
+  "start_title": "Ask us any Legal matter",
+  "start_btn": "Start Now",
+
+  "showmore": "Show More",
+  "collapse": "Collapse"
+}
