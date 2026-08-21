@@ -1,3 +1,134 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ------------------------------------------------------------------ *
+ * CLIC brand tokens
+ * Mirror of the Tailwind palette, for the places that need raw CSS
+ * rather than a utility class (Vuetify internals, maz-ui, ::placeholder).
+ * All values sampled from https://ai.hklii.hk/recommender/
+ * ------------------------------------------------------------------ */
+:root {
+  --clic-dark-purple: #2c1646;
+  --clic-mid-purple: #8d819b;
+  --clic-muted-purple: #6c5e86;
+  --clic-pale-purple: #ded8eb;
+  --clic-line-purple: #d3aad4;
+  --clic-amber: #f5b23a;
+  --clic-amber-soft: #fdf9e5;
+  --clic-amber-line: #fad99b;
+  --clic-amber-text: #c07e4b;
+  --clic-blue: #3791ca;
+  --clic-ink: #37373d;
+  --clic-ink-soft: #66666e;
+  --clic-pale-grey: #f1f2f5;
+  --clic-grey-line: #d8d6db;
+}
+
+/* ------------------------------------------------------------------ *
+ * Base typography
+ * Vuetify hard-codes Roboto on `.v-application`, which beats the Tailwind
+ * `font-sans` stack because every page is wrapped in <v-app>. Re-assert
+ * the brand stack so the ZH-HK / ZH-CN locales get a proper CJK face
+ * instead of falling back to a serif.
+ * ------------------------------------------------------------------ */
+html,
+body,
+.v-application,
+.v-application .v-application__wrap {
+  font-family: theme("fontFamily.sans");
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  color: var(--clic-ink);
+}
+
+/* Vuetify paints `.v-application` white, which hides the layout's lavender
+   gradient. Let the layout background show through. */
+.v-application {
+  background: transparent !important;
+}
+
+/* Vuetify's own button/chip labels should use the brand sans too. */
+.v-btn,
+.v-chip,
+.v-list-item-title {
+  font-family: theme("fontFamily.sans") !important;
+}
+
+/* ------------------------------------------------------------------ *
+ * Display face
+ * The logo wordmark, hero title, step titles and jumpstart card titles
+ * are all set in the slab serif.
+ * ------------------------------------------------------------------ */
+.font-display,
+h1,
+h2,
+h3 {
+  font-family: theme("fontFamily.display");
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  text-wrap: balance;
+}
+
+/* ------------------------------------------------------------------ *
+ * Links
+ * Preflight strips colour and underline from <a>; the nav relies on
+ * inherited colour plus a hover tint, so restore only that much.
+ * ------------------------------------------------------------------ */
+a {
+  color: inherit;
+  transition: color 150ms ease, opacity 150ms ease;
+}
+
+/* ------------------------------------------------------------------ *
+ * Focus visibility (accessibility)
+ * ------------------------------------------------------------------ */
+:focus-visible {
+  outline: 2px solid var(--clic-mid-purple);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ *
+ * maz-ui stepper theming
+ * MazStepper colours itself from HSL custom properties. Setting them on a
+ * wrapper element is version-safe: unlike the previous approach it does
+ * not depend on maz-ui's build-hashed scoped class names.
+ * ------------------------------------------------------------------ */
+.clic-stepper {
+  --maz-primary: 266 53% 18%; /* #2C1646 */
+  --maz-primary-foreground: 0 0% 100%;
+  --maz-warning: 38 90% 59%; /* #F5B23A */
+  --maz-warning-foreground: 266 53% 18%;
+  --maz-success: 38 90% 59%;
+  --maz-success-foreground: 266 53% 18%;
+  --maz-radius: 0.5rem;
+}
+
+/* Step titles are the slab serif; subtitles stay in the sans. */
+.clic-stepper .m-stepper__title {
+  font-family: theme("fontFamily.display");
+  font-weight: 700;
+  color: var(--clic-ink);
+}
+
+.clic-stepper .m-stepper__subtitle {
+  color: var(--clic-ink);
+}
+
+/* The vertical rail that links the numbered steps. */
+.clic-stepper .m-stepper__content {
+  border-color: var(--clic-line-purple) !important;
+}
+
+/* Hovering a step header shouldn't paint a grey block over the card. */
+.clic-stepper .m-stepper__header:not(:disabled):hover {
+  background-color: transparent !important;
+}

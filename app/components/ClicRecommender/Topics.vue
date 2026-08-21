@@ -3,12 +3,11 @@
     <div class="flex flex-wrap justify-start gap-4 mb-8">
       <div v-for="(topic, index) in topics" :key="index">
         <v-btn
-          class="text-none my-2 p-1 rounded-l-md"
+          class="text-none my-1 px-4"
           variant="flat"
+          rounded="lg"
           :prepend-icon="selectedTopics.includes(topic) ? 'mdi-check-bold' : ''"
-          :color="
-            selectedTopics.includes(topic) ? 'amber' : 'amber-lighten-4'
-          "
+          :color="selectedTopics.includes(topic) ? 'amber' : 'amber-soft'"
           @click="selectTopic(topic)"
         >
           {{ getTopic(topic) }}
@@ -16,10 +15,11 @@
       </div>
     </div>
     <v-btn
-      class=" text-white"
+      class="px-8"
       variant="flat"
       rounded="xl"
-      color="dark-purple"
+      size="large"
+      color="mid-purple"
       :disabled="selectedTopics.length === 0"
       @click="getRecommendations"
     >

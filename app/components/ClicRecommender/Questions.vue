@@ -12,10 +12,10 @@
     </div>
     <div class="flex xs:flex-col justify-center gap-6">
       <v-btn
-        class="text-white"
         variant="flat"
-        color="dark-purple"
+        color="mid-purple"
         rounded="xl"
+        size="large"
         prepend-icon="mdi-reload"
         @click="$emit('restart')"
       >
@@ -25,6 +25,7 @@
         variant="outlined"
         color="dark-purple"
         rounded="xl"
+        size="large"
         prepend-icon="mdi-pencil"
         @click="$emit('step1')"
         >{{ $t("recommender_step3_tostep1") }}</v-btn

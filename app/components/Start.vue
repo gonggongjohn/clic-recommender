@@ -1,8 +1,10 @@
 <template>
   <div
-    class="flex flex-col justify-center items-center gap-6 bg-blue py-12 bg-start bg-center bg-cover"
+    class="flex flex-col justify-center items-center gap-6 py-16 bg-start bg-center bg-cover"
   >
-    <div class="text-5xl text-center text-white">{{ $t("start_title") }}</div>
+    <div class="font-display text-5xl xs:text-3xl font-bold text-center text-white px-6">
+      {{ $t("start_title") }}
+    </div>
     <div>
       <NuxtLink to="/">
         <v-btn variant="flat" color="amber" rounded="xl" size="x-large"
@@ -15,6 +17,13 @@
 
 <style scoped>
 .bg-start {
-  background-image: url(/background.jpg);
+  /* Brand-purple scrim over the photo so the white headline stays legible.
+     Previously this relied on a `bg-blue` utility that was never defined. */
+  background-image: linear-gradient(
+      to bottom,
+      rgba(48, 22, 81, 0.88),
+      rgba(48, 22, 81, 0.72)
+    ),
+    url(/background.jpg);
 }
 </style>

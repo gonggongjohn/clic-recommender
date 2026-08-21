@@ -1,105 +1,80 @@
 <template>
-  <div
-    class="bg-pale-purple relative w-full text-dark-purple py-4 [&>div]:xs:px-[6%] [&>div]:md:px-[8%] [&>div]:lg:px-[12%]"
-  >
-    <div class="flex justify-center flex-wrap">
-      <div class="flex justify-between w-full">
-        <div>
+  <footer class="bg-pale-purple w-full text-dark-purple pt-8 pb-6">
+    <div class="xs:px-[6%] md:px-[4%]">
+      <!-- Link row + primary CTA -->
+      <div class="flex justify-between items-center gap-6 xs:flex-col xs:items-start">
+        <nav class="flex flex-wrap gap-x-7 gap-y-2">
           <NuxtLink
-            to="/about"
-            class="block mt-2 md:inline-block lg:mt-0 mr-4 text-lg"
+            v-for="item in footerLinks"
+            :key="item.to"
+            :to="item.to"
+            class="text-lg hover:underline underline-offset-4"
           >
-            {{ $t("nav_about") }}
+            {{ $t(item.label) }}
           </NuxtLink>
-          <NuxtLink
-            to="/instructions"
-            class="block mt-2 md:inline-block lg:mt-0 mr-4 text-lg"
+        </nav>
+
+        <NuxtLink :to="links.clic" target="_blank" class="shrink-0">
+          <v-btn
+            class="text-none font-bold tracking-wide"
+            color="amber"
+            rounded="xl"
+            size="x-large"
+            variant="flat"
+            >{{ $t("footer_btn") }}</v-btn
           >
-            {{ $t("nav_howto") }}
-          </NuxtLink>
-          <NuxtLink
-            to="/terms"
-            class="block mt-2 md:inline-block lg:mt-0 mr-4 text-lg"
-          >
-            {{ $t("nav_terms") }}
-          </NuxtLink>
-          <NuxtLink
-            to="/disclaimer"
-            class="block mt-2 md:inline-block lg:mt-0 mr-4 text-lg"
-          >
-            {{ $t("nav_disclaimer") }}
-          </NuxtLink>
-          <NuxtLink
-            to="/feedback"
-            class="block mt-2 md:inline-block lg:mt-0 mr-4 text-lg"
-          >
-            {{ $t("nav_feedback") }}
-          </NuxtLink>
-        </div>
-        <div class="flex justify-center">
-          <NuxtLink :to="links.clic" target="_blank">
-            <v-btn
-              class="block text-none mt-2 md:inline-block lg:mt-0 text-lg"
-              color="amber"
-              rounded="xl"
-              size="x-large"
-              variant="flat"
-              >{{ $t("footer_btn") }}</v-btn>
-          </NuxtLink>
-        </div>
+        </NuxtLink>
       </div>
-    </div>
-    <div class="flex justify-center xs:flex-wrap pt-6 pb-4">
-      <div class="flex flex-wrap gap-6">
-        <div>
-          <NuxtLink :to="links.clic" target="_blank">
+
+      <!-- Logos + disclaimer -->
+      <div class="flex justify-center pt-10 pb-6">
+        <div class="flex items-center xs:flex-wrap xs:justify-center gap-6">
+          <NuxtLink :to="links.clic" target="_blank" class="shrink-0">
             <NuxtImg
-              class="flex-shrink-0"
               src="/favicon.ico"
               :alt="$t('title')"
               :title="$t('title')"
-              fit="contain"
-              width="60"
+              width="72"
             />
           </NuxtLink>
-        </div>
-        <div>
-          <NuxtLink :to="links.lawTech" target="_blank">
+
+          <NuxtLink :to="links.lawTech" target="_blank" class="shrink-0">
             <NuxtImg
-              class="flex-shrink-0"
               src="/lawtech_logo.png"
               :alt="$t('lawtech')"
               :title="$t('lawtech')"
-              fit="contain"
-              width="250"
+              width="290"
             />
           </NuxtLink>
-        </div>
-        <div class="xs:hidden vl mt-1 mb-2"></div>
-        <div class="flex-grow">
-          <div class="text-wrap max-w-lg text-sm">
+
+          <div class="xs:hidden self-stretch border-l border-light-purple"></div>
+
+          <p class="max-w-prose text-sm leading-relaxed text-ink">
             {{ $t("footer_disclaimer") }}
-          </div>
+          </p>
         </div>
       </div>
-    </div>
-    <div class="flex justify-center my-2">
-      <v-divider thickness="2"></v-divider>
-    </div>
-    <div class="flex text-dark-grey">
-      <div>
+
+      <div class="text-sm text-ink-soft">
         {{ $t("footer_copyright") }}
       </div>
     </div>
-  </div>
+  </footer>
 </template>
 
 <script setup lang="ts">
 import { links } from "@/data/links";
-</script>
 
-<style scoped>
-.vl {
-  border-left: 1px solid #766992;
-}
-</style>
+// Mirrors the live site's footer. Privacy Policy and Acknowledgement are
+// sections inside existing pages rather than routes of their own.
+const footerLinks = [
+  { to: "/", label: "nav_home" },
+  { to: "/about", label: "nav_about" },
+  { to: "/instructions", label: "nav_howto" },
+  { to: "/terms", label: "nav_terms" },
+  { to: "/disclaimer", label: "nav_disclaimer" },
+  { to: "/terms#privacy", label: "nav_privacy" },
+  { to: "/about#acknowledgement", label: "nav_acknowledgement" },
+  { to: "/feedback", label: "nav_feedback" },
+];
+</script>

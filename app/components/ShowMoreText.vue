@@ -1,20 +1,17 @@
 <template>
-  <div>
-    <p id="text" :class="`${more ? 'text-expand' : 'text-collapse'}`" ref="textRef">
-      {{ text }}
-    </p>
-  </div>
-  <div v-if="showButton">
-    <small
-      class="bg-pale-grey p-1 rounded text-orange"
-      @click="showMoreToggle"
-    >
-      <a>{{
-        more ? $t("collapse") : $t("showmore")
-      }}</a>
-      <v-icon :icon="more ? 'mdi-chevron-up' : 'mdi-chevron-down'"></v-icon>
-    </small>
-  </div>
+  <p :class="more ? 'text-expand' : 'text-collapse'" ref="textRef">
+    {{ text }}
+  </p>
+
+  <button
+    v-if="showButton"
+    type="button"
+    class="text-amber-text inline-flex items-center gap-1 mt-1 hover:opacity-80"
+    @click.stop="showMoreToggle"
+  >
+    {{ more ? $t("collapse") : $t("showmore") }}
+    <v-icon :icon="more ? 'mdi-chevron-up' : 'mdi-chevron-down'" size="small" />
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -23,7 +20,7 @@ const showButton = ref(false);
 const more = ref(false);
 const textRef = ref<Element | null>(null);
 
-// check if element hiehgt is more than maximum line allowed
+// Check whether the element is taller than the maximum number of lines.
 const checkOverflow = () => {
   const textElement = textRef.value;
   if (textElement) {
@@ -40,11 +37,15 @@ const showMoreToggle = () => {
 onMounted(() => {
   const textElement = textRef.value;
   if (textElement) {
-    // observers to observe resize and innerHTML changes
+    // Observe resize and content changes.
     const resizeObserver = new ResizeObserver(checkOverflow);
     const mutationObserver = new MutationObserver(checkOverflow);
     resizeObserver.observe(textElement);
-    mutationObserver.observe(textElement, {characterData: false, childList: true, attributes: false})
+    mutationObserver.observe(textElement, {
+      characterData: false,
+      childList: true,
+      attributes: false,
+    });
   }
 });
 </script>
@@ -55,17 +56,11 @@ onMounted(() => {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: v-bind(max_rows);
   overflow: hidden;
+  white-space: pre-line;
 }
 
 .text-expand {
   display: block;
-}
-
-small {
-  cursor: pointer;
-}
-
-small:hover {
-  filter: brightness(0.9);
+  white-space: pre-line;
 }
 </style>

@@ -11,6 +11,21 @@ export default defineNuxtConfig({
     head: {
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
+      link: [
+        // The original site sets headings in a slab serif and body copy in a
+        // humanist sans. Swap these two families (here and in
+        // tailwind.config.ts `fontFamily`) if you want a different pairing.
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&family=Lato:wght@300;400;700&display=swap",
+        },
+      ],
     },
   },
 
@@ -56,6 +71,29 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@maz-ui/nuxt",
   ],
+
+  image: {
+    // Why "none":
+    //
+    // @nuxt/image's default `ipx` provider rewrites <NuxtImg> to
+    // /_ipx/w_85/Logo_markOnly.svg and resizes on demand inside the Nitro
+    // server. IPX reads the source file from disk at `ipx.fs.dir`, which
+    // Nitro hard-codes to "../../public" relative to the built nitro chunk.
+    //
+    //   node-server preset -> .output/server/chunks/nitro/ + ../../public
+    //                         = .output/public            -> EXISTS  (200)
+    //   azure-swa preset   -> .output/server/functions/chunks/nitro/ + ../../public
+    //                         = .output/server/functions/public -> MISSING (404)
+    //
+    // On Azure Static Web Apps the public folder is uploaded to the static
+    // CDN and is NOT copied into the Functions bundle, so every /_ipx/**
+    // request 404s. That is why the logos break only after deployment.
+    //
+    // These three images are fixed-size brand assets (an SVG, an .ico and a
+    // small PNG) with nothing to gain from runtime resizing, so serve them
+    // straight from the CDN. <NuxtImg> now emits <img src="/Logo_markOnly.svg">.
+    provider: "none",
+  },
 
   i18n: {
     strategy: "no_prefix",

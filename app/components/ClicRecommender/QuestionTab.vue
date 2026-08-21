@@ -1,21 +1,21 @@
 <template>
   <div
-    :class="`flex flex-col rounded-t [&>div]:px-4 [&>div]:xs:px-4 [&>div]:grid [&>div]:grid-cols-12 ${
-      collapse ? 'bg-amber-lighten-4' : 'bg-amber'
+    :class="`flex flex-col rounded-xl overflow-hidden shadow-card transition-colors duration-150 [&>div]:px-4 [&>div]:xs:px-4 [&>div]:grid [&>div]:grid-cols-12 ${
+      collapse ? 'bg-amber-soft border-2 border-amber-line' : 'bg-amber'
     }`"
   >
     <div class="[&>div]:px-4 [&>div]:pt-4 [&>div]:xs:px-1 [&>div]:xs:pt-4">
       <div class="col-span-2 xs:col-span-12">
-        <div class="flex flex-nowrap text-lg">
+        <div class="flex flex-nowrap text-lg text-ink font-semibold">
           {{ $t("recommender_step3_question") }} #{{ index }}
         </div>
       </div>
       <div class="col-span-7 xs:col-span-12 flex flex-col gap-3">
-        <div class="text-2xl text-wrap">
+        <div class="font-display text-2xl text-wrap text-ink font-bold">
           {{ getQuestionText(question) }}
         </div>
         <div>
-          <v-chip variant="flat" class="bg-amber-lighten-5" label>{{
+          <v-chip variant="flat" color="amber-soft" label>{{
             getTopic(question)
           }}</v-chip>
         </div>
@@ -26,7 +26,9 @@
             variant="flat"
             rounded="xl"
             append-icon="mdi-open-in-new"
-            class="bg-dark-purple rounded text-white w-full"
+            color="mid-purple"
+            size="large"
+            class="w-full"
           >
             {{ $t("recommender_step3_visit") }}
           </v-btn>
@@ -37,7 +39,7 @@
     <div class="[&>div]:md:px-4 [&>div]:py-2">
       <div class="col-span-2"></div>
       <div
-        class="col-span-10 xs:col-span-12 flex xs:justify-center cursor-pointer rounded text-dark-purple"
+        class="col-span-10 xs:col-span-12 flex xs:justify-center items-center gap-1 cursor-pointer rounded text-dark-purple hover:opacity-80"
         @click="excerptToggle"
       >
         <a>{{
@@ -57,7 +59,7 @@
       } overflow-hidden text transition-max-height duration-[150ms] ease-in-out`"
     >
       <div class="col-span-2 xs:col-span-12">
-        {{ $t("recommender_step3_awnser") }}
+        <span class="text-xs font-semibold tracking-wide text-light-grey">{{ $t("recommender_step3_awnser") }}</span>
       </div>
       <div class="col-span-7 xs:col-span-12 flex flex-col gap-1 xs:pb-2 md:pb-4">
         <ShowMoreText :text="getScope(question)" max_rows="5" />

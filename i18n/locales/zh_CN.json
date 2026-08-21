@@ -1,10 +1,8 @@
 {
   "title": "社区法网推荐系统",
   "lawtech": "法律与科技研究中心",
-
   "meta_description": "社区法网推荐系统。告诉我们您的情况并向我们询问任何法律问题，全部由AI提供支援",
   "meta_keywords": "社区法网、社区法网推荐人、青年社区法网、老年社区法网、家庭法网、人工智慧律师、香港大学",
-
   "nav_title": "内容推荐系统",
   "nav_home": "首页",
   "nav_about": "关于我们",
@@ -12,11 +10,9 @@
   "nav_terms": "使用条款",
   "nav_disclaimer": "免责声明",
   "nav_feedback": "意见",
-
   "footer_btn": "前往社区法网",
   "footer_disclaimer": "社区法网提供的资料只供初步参考，而有关资料并非正式法律意见。阁下如欲就任何法律事项取得更详尽的资料或支援服务，须谘询阁下的律师。",
   "footer_copyright": "香港大学社区法网版权所有©2024",
-
   "recommender_slogan": "释放社区法网的力量： 针对你的情况推荐内容",
   "recommender_name": "社区法网内容推荐系统",
   "recommender_instructions": "按照以下步骤获取与你的情况相关的社区法网内容。",
@@ -41,11 +37,9 @@
   "recommender_step1_desc": "写下你的情况或提出法律问题",
   "recommender_step1_input": "请输入场景...",
   "recommender_step1_btn": "继续",
-
   "recommender_step2_title": "选择主题",
   "recommender_step2_desc": "点击选择你认为相关的主题",
   "recommender_step2_btn": "获得建议",
-  
   "recommender_step3_title": "获取并访问推荐",
   "recommender_step3_desc": "您的情况可能会透过以下社区法网页面（由下面的模型问题表示）得到解决。 按一下可存取相关的 CLIC 页面或段落。",
   "recommender_step3_question": "问题",
@@ -56,27 +50,34 @@
   "recommender_step3_feedback": "这个建议有帮助吗？",
   "recommender_step3_restart": "重新开始",
   "recommender_step3_tostep1": "返回并编辑步骤 1",
-
   "recommender_search_working_title": "正在查找相关问题...",
   "recommender_search_working_desc": "我们正在查找与您的情况相关的问题。",
   "recommender_search_waking_title": "正在准备搜索服务...",
   "recommender_search_waking_desc": "搜索服务可能刚从闲置状态启动。首次搜索可能需要稍长一些时间来准备搜索索引，之后的搜索通常会更快。",
   "recommender_search_error": "无法完成搜索，请稍后重试。",
-
   "about_rationale_title": "它是如何运作的？",
   "about_rationale_explain_pt1": "Place holder",
   "about_rationale_explain_pt2": "Place holder",
   "about_team_title": "成员",
   "about_ack_title": "鸣谢",
   "about_ack": "我们谨向以下曾为该项目提供帮助的学生致谢：",
-
   "terms_disclaimer_title": "免责声明",
   "terms_privacy_title": "隐私权政策",
   "terms_usage_title": "使用条款",
-
   "start_title": "向我们询问任何法律问题",
   "start_btn": "现在开始",
-
   "showmore": "展示更多",
-  "collapse": "展示更少"
+  "collapse": "展示更少",
+  "nav_privacy": "隐私政策",
+  "nav_acknowledgement": "鸣谢",
+  "survey_message": "协助我们改善社区法网内容推荐系统 (CRec)",
+  "survey_cta": "填写问卷",
+  "disclaimer_notice": "请细阅[[link]]。你继续使用社区法网内容推荐系统，即表示你已知悉有关条款。",
+  "recommender_description": "社区法网内容推荐系统是一个人工智能推荐系统，旨在协助用户在社区法网 (CLIC) 上高效地寻找相关法律信息。系统会分析用户输入的内容，无论是法律情境或法律问题，并根据描述推荐相应的社区法网页面。用户可通过这些推荐页面获取相关法律信息。",
+  "recommender_voice": "点击开始语音输入",
+  "recommender_voice_stop": "停止语音输入",
+  "recommender_voice_denied": "麦克风权限已被阻止。请在浏览器设置中允许使用麦克风。",
+  "recommender_voice_error": "语音输入暂时无法使用，请改用文字输入。",
+  "recommender_or_write": "或在下方输入",
+  "recommender_samples_jumpstart": "使用此例子"
 }

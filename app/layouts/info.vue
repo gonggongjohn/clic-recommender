@@ -4,26 +4,28 @@
     <header>
       <Navbar />
     </header>
-    <div class="flex flex-col content-center min-h-screen">
-      <div class="bg bg-center bg-cover flex-grow flex flex-col py-6 xs:[&>div]:mx-[0%] md:[&>div]:mx-[4%] lg:[&>div]:mx-[11%] [&>div]:my-[1%]">
+
+    <div class="flex flex-col min-h-screen">
+      <div class="page-bg flex-grow flex flex-col py-8 xs:px-[6%] md:px-[4%]">
         <slot />
       </div>
+
       <Start />
-      <div>
-        <BottomNavbar />
-      </div>
+      <BottomNavbar />
     </div>
   </v-app>
-  
 </template>
 
 <style scoped>
-.bg {
+.page-bg {
   background-image: linear-gradient(
       to bottom,
-      rgba(219, 211, 235, 0.86),
-      rgba(255, 255, 255, 1)
+      rgba(206, 205, 231, 0.92),
+      rgba(236, 229, 243, 0.94)
     ),
     url(/background.jpg);
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 </style>

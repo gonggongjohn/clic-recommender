@@ -1,10 +1,8 @@
 {
   "title": "社區法網推薦系統",
   "lawtech": "法律與科技研究中心",
-
   "meta_description": "社區法網推薦系統。告訴我們您的情況並向我們詢問任何法律問題，全部由AI提供支援",
   "meta_keywords": "社區法網、社區法網推薦人、青年社區法網、老年社區法網、家庭法網、人工智慧律師、香港大學",
-
   "nav_title": "內容推薦系統",
   "nav_home": "首頁",
   "nav_about": "關於我們",
@@ -12,11 +10,9 @@
   "nav_terms": "使用條款",
   "nav_disclaimer": "免責聲明",
   "nav_feedback": "意見",
-
   "footer_btn": "前往社區法網",
   "footer_disclaimer": "社區法網提供的資料只供初步參考，而有關資料並非正式法律意見。閣下如欲就任何法律事項取得更詳盡的資料或支援服務，須諮詢閣下的律師。",
   "footer_copyright": "香港大學社區法網 版權所有 ©2024",
-
   "recommender_slogan": "釋放社區法網的力量： 針對你的情況推薦內容",
   "recommender_name": "社區法網內容推薦系統",
   "recommender_instructions": "按照以下步驟獲取與你的情況相關的社區法網內容。",
@@ -41,11 +37,9 @@
   "recommender_step1_desc": "寫下你的情況或提出法律問題",
   "recommender_step1_input": "請輸入場景...",
   "recommender_step1_btn": "繼續",
-
   "recommender_step2_title": "選擇主題",
   "recommender_step2_desc": "點擊選擇你認為相關的主題",
   "recommender_step2_btn": "獲得建議",
-  
   "recommender_step3_title": "獲取並訪問推薦",
   "recommender_step3_desc": "您的情況可能會透過以下社區法網頁面（由下面的模型問題表示）得到解決。 按一下可存取相關的 CLIC 頁面或段落。",
   "recommender_step3_question": "問題",
@@ -61,21 +55,29 @@
   "recommender_search_waking_title": "正在準備搜尋服務...",
   "recommender_search_waking_desc": "搜尋服務可能剛從閒置狀態啟動。首次搜尋可能需要稍長一些時間來準備搜尋索引，之後的搜尋通常會更快。",
   "recommender_search_error": "無法完成搜尋，請稍後再試。",
-
   "about_rationale_title": "它是如何運作的？",
   "about_rationale_explain_pt1": "Place holder",
   "about_rationale_explain_pt2": "Place holder",
   "about_team_title": "成員",
   "about_ack_title": "鳴謝",
   "about_ack": "我們亦謹向以下曾為本項目提供協助的學生致謝：",
-
   "terms_disclaimer_title": "免責聲明",
   "terms_privacy_title": "隱私權政策",
   "terms_usage_title": "使用條款",
-
   "start_title": "向我們詢問任何法律問題",
   "start_btn": "現在開始",
-
   "showmore": "展示更多",
-  "collapse": "展示更少"
+  "collapse": "展示更少",
+  "nav_privacy": "私隱政策",
+  "nav_acknowledgement": "鳴謝",
+  "survey_message": "協助我們改善社區法網內容推薦系統 (CRec)",
+  "survey_cta": "填寫問卷",
+  "disclaimer_notice": "請細閱[[link]]。你繼續使用社區法網內容推薦系統，即表示你已知悉有關條款。",
+  "recommender_description": "社區法網內容推薦系統是一個人工智能推薦系統，旨在協助使用者在社區法網 (CLIC) 上有效地尋找相關法律資訊。系統會分析使用者輸入的內容，不論是法律情境或法律問題，並根據描述推薦相應的社區法網頁面。使用者可透過這些推薦頁面獲取相關法律資訊。",
+  "recommender_voice": "按此開始語音輸入",
+  "recommender_voice_stop": "停止語音輸入",
+  "recommender_voice_denied": "麥克風權限已被封鎖。請在瀏覽器設定中允許使用麥克風。",
+  "recommender_voice_error": "語音輸入暫時無法使用，請改用文字輸入。",
+  "recommender_or_write": "或在下方輸入",
+  "recommender_samples_jumpstart": "使用此例子"
 }
