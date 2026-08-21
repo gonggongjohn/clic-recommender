@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col gap-8 xs:mr-4 md:mr-8">
-    <div class="flex flex-col gap-4 ">
+  <div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-6">
       <ClicRecommenderQuestionTab
         v-for="index in Math.min(
           filteredQuestions.length,
@@ -10,10 +10,10 @@
         :question="filteredQuestions[index - 1]"
       />
     </div>
-    <div class="flex xs:flex-col justify-center gap-6">
+    <div class="flex xs:flex-col justify-start gap-4">
       <v-btn
         variant="flat"
-        color="mid-purple"
+        color="dark-purple"
         rounded="xl"
         size="large"
         prepend-icon="mdi-reload"
@@ -22,8 +22,9 @@
         {{ $t("recommender_step3_restart") }}
       </v-btn>
       <v-btn
-        variant="outlined"
-        color="dark-purple"
+        variant="flat"
+        color="btn-soft"
+        class="text-dark-purple"
         rounded="xl"
         size="large"
         prepend-icon="mdi-pencil"

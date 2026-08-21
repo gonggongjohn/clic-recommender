@@ -35,6 +35,14 @@ const clic = {
   "mild-blue": "#0369a1",
   "light-blue": "#34B4D1",
 
+  // Recommendation cards
+  "card-line": "#EAE8EE", // card hairline border
+  excerpt: "#FDF7DE", // excerpt panel fill
+  "excerpt-line": "#E8E3CC", // divider inside the excerpt panel
+  preview: "#B05E1E", // "Show More" / "Collapse Preview" links
+  "topic-soft": "#E7F1F8", // unselected topic chip
+  "btn-soft": "#E5E3E8", // secondary button fill
+
   // Neutrals
   ink: "#37373D", // default body copy
   "ink-soft": "#66666E", // copyright, secondary copy

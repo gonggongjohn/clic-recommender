@@ -5,9 +5,14 @@
         <v-btn
           class="text-none my-1 px-4"
           variant="flat"
-          rounded="lg"
-          :prepend-icon="selectedTopics.includes(topic) ? 'mdi-check-bold' : ''"
-          :color="selectedTopics.includes(topic) ? 'amber' : 'amber-soft'"
+          rounded="md"
+          :prepend-icon="
+            selectedTopics.includes(topic)
+              ? 'mdi-check-circle-outline'
+              : 'mdi-circle-outline'
+          "
+          :color="selectedTopics.includes(topic) ? 'clic-blue' : 'topic-soft'"
+          :class="selectedTopics.includes(topic) ? '' : 'text-clic-blue'"
           @click="selectTopic(topic)"
         >
           {{ getTopic(topic) }}
@@ -19,7 +24,8 @@
       variant="flat"
       rounded="xl"
       size="large"
-      color="mid-purple"
+      color="dark-purple"
+      prepend-icon="mdi-magnify"
       :disabled="selectedTopics.length === 0"
       @click="getRecommendations"
     >

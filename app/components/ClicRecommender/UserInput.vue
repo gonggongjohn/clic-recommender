@@ -32,7 +32,7 @@
       <v-btn
         class="px-8"
         variant="flat"
-        color="mid-purple"
+        color="dark-purple"
         rounded="xl"
         size="large"
         prepend-icon="mdi-arrow-down"

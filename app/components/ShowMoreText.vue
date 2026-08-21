@@ -6,7 +6,7 @@
   <button
     v-if="showButton"
     type="button"
-    class="text-amber-text inline-flex items-center gap-1 mt-1 hover:opacity-80"
+    class="text-preview inline-flex items-center gap-1 mt-1 hover:opacity-80"
     @click.stop="showMoreToggle"
   >
     {{ more ? $t("collapse") : $t("showmore") }}

@@ -28,6 +28,11 @@ export default defineNuxtPlugin((app) => {
       "amber-text": "#C07E4B",
 
       "clic-blue": "#3791CA",
+      // Used via `color=` props on chips/buttons, so they must exist here as
+      // well as in tailwind.config.ts.
+      "topic-soft": "#E7F1F8",
+      "btn-soft": "#E5E3E8",
+      excerpt: "#FDF7DE",
       "dark-blue": "#0c4a6e",
       "mild-blue": "#0369a1",
       "light-blue": "#34B4D1",

@@ -12,28 +12,36 @@
 
       <p class="text-ink mt-1"
         ><span>{{ before }}</span
-        ><NuxtLink to="/disclaimer" class="underline underline-offset-2">{{
-          $t("nav_disclaimer")
-        }}</NuxtLink
+        ><button
+          type="button"
+          class="underline underline-offset-2 hover:opacity-80"
+          @click="dialog = true"
+        >
+          {{ $t("nav_disclaimer") }}</button
         ><span>{{ after }}</span></p
       >
     </div>
   </aside>
+
+  <DisclaimerDialog v-model="dialog" />
 </template>
 
 <script setup lang="ts">
 /**
- * This notice puts a link in the middle of a sentence.
+ * This notice puts a link in the middle of a sentence, and that link opens the
+ * full disclaimer in a modal.
  *
- * `<i18n-t>` would be the natural tool, but nuxt.config.ts sets
- * `i18n.bundle.fullInstall: false`, which strips vue-i18n's components. So we
- * split the message around a placeholder instead.
+ * `<i18n-t>` would be the natural tool for the inline link, but
+ * nuxt.config.ts sets `i18n.bundle.fullInstall: false`, which strips
+ * vue-i18n's components. So we split the message around a placeholder.
  *
  * The placeholder is `[[link]]`, NOT `{link}`: vue-i18n treats braces as an
  * interpolation slot and silently replaces `{link}` with an empty string when
- * no matching argument is passed, which would leave nothing to split on.
+ * no matching argument is passed, leaving nothing to split on.
  */
 const { t } = useI18n();
+
+const dialog = ref(false);
 
 const SLOT = "[[link]]";
 

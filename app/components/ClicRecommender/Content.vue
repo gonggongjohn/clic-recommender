@@ -4,7 +4,21 @@
       <DisclaimerNotice />
     </div>
 
-    <MazStepper class="mt-8" color="warning" :model-value="step">
+    <!--
+      `all-steps-opened` keeps steps 1 and 2 expanded once the user moves on,
+      so their original wording and topic choices stay visible next to the
+      results. `auto-validate-steps` gives completed steps the green tick.
+      `can-close-steps=false` stops a click on a header from collapsing one.
+    -->
+    <MazStepper
+      class="mt-8"
+      color="warning"
+      :model-value="step"
+      all-steps-opened
+      auto-validate-steps
+      :can-close-steps="false"
+      @update:model-value="step = $event"
+    >
       <template #title-1>
         <div class="flex items-center gap-3">
           <span>{{ $t("recommender_step1_title") }}</span>

@@ -107,8 +107,9 @@ a {
   --maz-primary-foreground: 0 0% 100%;
   --maz-warning: 38 90% 59%; /* #F5B23A */
   --maz-warning-foreground: 266 53% 18%;
-  --maz-success: 38 90% 59%;
-  --maz-success-foreground: 266 53% 18%;
+  /* Completed steps keep maz-ui's green tick (#8DC636 on the live site). */
+  --maz-success: 82 57% 49%;
+  --maz-success-foreground: 0 0% 100%;
   --maz-radius: 0.5rem;
 }
 
@@ -126,6 +127,22 @@ a {
 /* The vertical rail that links the numbered steps. */
 .clic-stepper .m-stepper__content {
   border-color: var(--clic-line-purple) !important;
+}
+
+/* With every step open at once, maz-ui still dims the non-current headers.
+   Keep them all fully legible so users can compare input against results. */
+.clic-stepper .m-stepper__header.--disabled,
+.clic-stepper .m-stepper__header:disabled {
+  color: inherit !important;
+  cursor: default;
+}
+
+/* Disabled primary buttons: the live site fades to a muted purple rather
+   than Vuetify's default grey. */
+.v-btn--disabled.v-btn--variant-flat {
+  background-color: var(--clic-mid-purple) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
 /* Hovering a step header shouldn't paint a grey block over the card. */

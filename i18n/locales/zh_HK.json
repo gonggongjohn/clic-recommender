@@ -39,7 +39,7 @@
   "recommender_step1_btn": "繼續",
   "recommender_step2_title": "選擇主題",
   "recommender_step2_desc": "點擊選擇你認為相關的主題",
-  "recommender_step2_btn": "獲得建議",
+  "recommender_step2_btn": "搜尋",
   "recommender_step3_title": "獲取並訪問推薦",
   "recommender_step3_desc": "您的情況可能會透過以下社區法網頁面（由下面的模型問題表示）得到解決。 按一下可存取相關的 CLIC 頁面或段落。",
   "recommender_step3_question": "問題",
@@ -79,5 +79,15 @@
   "recommender_voice_denied": "麥克風權限已被封鎖。請在瀏覽器設定中允許使用麥克風。",
   "recommender_voice_error": "語音輸入暫時無法使用，請改用文字輸入。",
   "recommender_or_write": "或在下方輸入",
-  "recommender_samples_jumpstart": "使用此例子"
+  "recommender_samples_jumpstart": "使用此例子",
+  "close": "關閉",
+  "recommender_step3_excerpt_note": "此摘錄取自社區法網頁面，並不構成對該問題的完整解答或詳細說明。如欲查閱原文，請按下方的「瀏覽頁面」。",
+  "disclaimer_body": [
+    "The information available at the Community Legal Information Centre (CLIC) and its related services (including the CLIC Recommender) is for preliminary reference only and should NOT be considered as legal advice. You should consult your own lawyer if you want to obtain further information or legal assistance concerning any specific legal matter.",
+    "The Community Legal Information Centre (CLIC) and its related services are operated by the Law & Technology Centre of the University of Hong Kong (the \"host University\").",
+    "\"CLIC data providers\" include, but are not limited to, the Judiciary of Hong Kong, the Department of Justice of the Hong Kong SAR Government, and the University of Hong Kong.",
+    "Neither CLIC, its host University, nor the CLIC data providers, encourage reliance on or accept responsibility for the information provided by CLIC. Any use or actions taken based on the information from CLIC are solely the responsibility of the users.",
+    "The contents of CLIC and its related services are provided as an informational guide only, and the information is presented on an \"as is\" basis. CLIC, its host University, and the CLIC data providers do not provide any guarantees, undertakings, or warranties regarding the accuracy, completeness, or currency of the information on CLIC and its related services. Users should verify information from another reliable source if it is of significant importance to them. For official versions of legal reference materials, users should refer to relevant official publications.",
+    "Hypertext links on CLIC are inserted by CLIC itself, not by the CLIC data providers. The insertion of hypertext links on CLIC is automated, and the links may not be comprehensive or accurate in all cases. CLIC, its host University, and the CLIC data providers do not provide any guarantees, undertakings, or warranties regarding the accuracy, comprehensiveness, or any other aspect of hypertext linking. Hypertext links merely provide useful connections between information in certain instances."
+  ]
 }
