@@ -5,6 +5,7 @@
   </Head>
 
   <SurveyBanner class="mb-10" />
+  <SurveyDialog />
   <ClicRecommenderHeader />
   <ClicRecommenderContent />
 </template>

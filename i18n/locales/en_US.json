@@ -91,5 +91,73 @@
     "Neither CLIC, its host University, nor the CLIC data providers, encourage reliance on or accept responsibility for the information provided by CLIC. Any use or actions taken based on the information from CLIC are solely the responsibility of the users.",
     "The contents of CLIC and its related services are provided as an informational guide only, and the information is presented on an \"as is\" basis. CLIC, its host University, and the CLIC data providers do not provide any guarantees, undertakings, or warranties regarding the accuracy, completeness, or currency of the information on CLIC and its related services. Users should verify information from another reliable source if it is of significant importance to them. For official versions of legal reference materials, users should refer to relevant official publications.",
     "Hypertext links on CLIC are inserted by CLIC itself, not by the CLIC data providers. The insertion of hypertext links on CLIC is automated, and the links may not be comprehensive or accurate in all cases. CLIC, its host University, and the CLIC data providers do not provide any guarantees, undertakings, or warranties regarding the accuracy, comprehensiveness, or any other aspect of hypertext linking. Hypertext links merely provide useful connections between information in certain instances."
-  ]
+  ],
+  "about_researchers_title": "Researchers",
+  "about_ack_body": "CLIC would like to express its sincere gratitude and appreciation to WYNG Foundation and HKU Knowledge Exchange Fund for their generous funding support for the development of the CLIC Recommender.",
+  "about_ack_logo_alt": "WYNG Foundation",
+  "howto_usage_title": "Usage",
+  "howto_usage_body": "With the CLIC Recommender, users simply need to provide a description of their legal scenario. The AI tool will intelligently analyze the users' situation, transform their concerns into suitable legal questions and get recommended relevant pages.",
+  "howto_features_title": "Features",
+  "howto_feature_titles": [
+    "Use Jumpstart samples to test quickly",
+    "Ask for recommendations without asking questions",
+    "Preview of recommended CLIC pages without going to the page"
+  ],
+  "howto_feature_bodies": [
+    "Not sure how to describe your scenario or just want to try out the tool? You can easily get started by leveraging our jumpstart samples. Simply click on the yellow blocks provided, and you'll have access to pre-written content that can help you get started or inspire your own ideas.",
+    "You do not need to type questions in your input to get recommendations. Simply input a situation with context and let the Recommender do the searching for you.",
+    "The recommender will automatically fetch the excerpt that best fits the input and topic you choose. You can read the previews before diving into the extensive information on CLIC."
+  ],
+  "howto_features_alt": "Screenshot of the described feature",
+  "howto_steps_title": "Steps to use CLIC Recommender",
+  "howto_step_label": "Step {n}",
+  "howto_step_titles": [
+    "Describe your situation",
+    "Choose Topics",
+    "Review relevant model questions",
+    "Visit relevant CLIC page for information"
+  ],
+  "howto_step_bodies": [
+    "Type in your situation or legal question into the text box and click “Continue”. If you are not sure what to type, feel free to click on the yellow boxes aside in the desktop version and test with a sample input.",
+    "The Recommender will return several topics that are available on CLIC and relevant to your input. To find more topics (if any), click “Show More”. Click on the tags to select all the applicable topics. After selecting all your topics, click “Search”.",
+    "The Recommender will return a maximum of 10 model questions that are relevant to your situation at a time. For each question, you have the option to click on “Preview Relevant Excerpt” to show the content from the CLIC page to which the question relates. To find more questions (if any), click on the page numbers or arrows (' > ' , ' >| ') at the bottom of the page.",
+    "If the preview appears to be closely connected to your situation, feel free to click the “Visit Page” button to access the complete content on CLIC to obtain more detailed information."
+  ],
+  "howto_steps_alt": "Screenshot of this step",
+  "howto_feedback_title": "Giving Feedback",
+  "howto_feedback_body": "You can help us to improve the Recommender by rating the usefulness and applicability of each of the pages recommended. Please give the recommendation a 5 stars if the information is very helpful, and 1 star if the recommendation is irrelevant.",
+  "howto_feedback_contact": "If you have any questions related to the Recommender, please fill in the feedback form on our [[link]]",
+  "howto_feedback_link": "Feedback Page.",
+  "howto_feedback_alt": "Rating a recommended CLIC page",
+  "privacy_body": [
+    "The personal data provided through the CLIC Recommender will be used by CLIC for purposes related to the services offered by the CLIC Recommender. The provision of personal data is voluntary. By inputting personal data, users consent and agree to the use of their personal data for the purposes related to the services offered by the CLIC Recommender. However, if users do not provide sufficient information, the CLIC Recommender may be unable to provide its services.",
+    "CLIC will maintain strict confidentiality of the data provided by users. The data may be shared with the University for administrative and academic purposes. CLIC will not disclose any personal information provided by users to external bodies or organizations, unless users have been informed or it is required by law."
+  ],
+  "terms_usage_titles": [
+    "Acceptance of Terms",
+    "Permitted Use",
+    "Prohibited Activities",
+    "Data Privacy and Security",
+    "Intellectual Property",
+    "Modifications and Updates"
+  ],
+  "terms_usage_bodies": [
+    "By using the CLIC Recommender, you agree to comply with these terms of use. If you do not agree with any part of these terms, please refrain from using the CLIC Recommender.",
+    "The CLIC Recommender is provided for lawful purposes only. You are permitted to use the CLIC Recommender in accordance with its intended functionality and applicable laws and regulations.",
+    "While using the CLIC Recommender, you are strictly prohibited from engaging in any activities that violate applicable laws or regulations, repurposing or distributing output from our services to harm others, interfering with the proper functioning of the CLIC Recommender or attempting to gain unauthorized access to it, and engaging in any activity that may cause harm or disruption to CLIC or other users.",
+    "Any data collected during your usage of the CLIC Recommender will be handled in accordance with our Privacy Policy. We implement reasonable security measures to protect your data from unauthorized access or disclosure.",
+    "All intellectual property rights associated with the CLIC Recommender, including but not limited to software, algorithms, and content, remain the exclusive property of CLIC. Users are granted a limited, non-exclusive license to use the CLIC Recommender strictly in accordance with this Usage Policy.",
+    "CLIC reserves the right to modify or update this Usage Policy at any time. It is the users' responsibility to review this policy periodically to stay informed of any changes. Continued use of the CLIC Recommender after any modifications constitutes your acceptance of the revised policy."
+  ],
+  "feedback_intro": "Let us know what you think by writing a feedback.",
+  "feedback_email": "Your E-mail Address",
+  "feedback_message": "Comments and Questions",
+  "feedback_submit": "Submit",
+  "feedback_success": "Thanks — your feedback has been sent.",
+  "feedback_error": "We couldn't send your feedback. Please try again.",
+  "feedback_email_required": "Enter your e-mail address.",
+  "feedback_email_invalid": "Enter a valid e-mail address.",
+  "feedback_message_required": "Enter your comments or questions.",
+  "survey_body": "We're currently evaluating CRec's effectiveness and would appreciate your feedback. Please take a moment to complete our short survey. Your responses will be used solely for academic research. Thank you for your support!",
+  "survey_image_alt": "The CLIC Recommender on desktop and mobile"
 }

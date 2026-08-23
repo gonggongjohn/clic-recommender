@@ -1,16 +1,16 @@
 {
   "coordinatorTitle": {
-    "en": "Co-Project Coordinator",
-    "tc": "項目聯席統籌主任",
-    "sc": "项目联席主席"
+    "en": "Co-Principal Investigator",
+    "tc": "共同首席研究員",
+    "sc": "共同首席研究员"
   },
   "coordinator": [
     {
       "name": "Prof. Anne S. Y. Cheung",
       "ent": {
-        "en": "Professor, Faculty of Law, The University of Hong Kong",
-        "tc": "香港大學法律學院教授",
-        "sc": "香港大学法律学院教授"
+        "en": "Emeritus Professor, Faculty of Law, The University of Hong Kong",
+        "tc": "香港大學法律學院榮休教授",
+        "sc": "香港大学法律学院荣休教授"
       },
       "website": "https://www.law.hku.hk/academic_staff/professor-anne-cheung-s-y/",
       "email": "anne.cheung@hku.hk"
@@ -18,9 +18,9 @@
     {
       "name": "Prof. Benjamin C.M. Kao",
       "ent": {
-        "en": "Professor, Department of Computer Science, Faculty of Engineering, The University of Hong Kong",
-        "tc": "香港大學工程學院計算機科學系教授",
-        "sc": "香港大学工程学院计算机科学系教授"
+        "en": "Professor, School of Computing and Data Science, The University of Hong Kong",
+        "tc": "香港大學計算與數據科學學院教授",
+        "sc": "香港大学计算与数据科学学院教授"
       },
       "website": "https://www.cs.hku.hk/index.php/people/academic-staff/kao",
       "email": "kao@cs.hku.hk"
@@ -30,15 +30,15 @@
     {
       "name": "Prof. Reynold C.K Cheng",
       "ent": {
-        "en": "Professor, Department of Computer Science, Faculty of Engineering, The University of Hong Kong",
-        "tc": "香港大學工程學院計算機科學系教授",
-        "sc": "香港大学工程学院计算机科学系教授"
+        "en": "Professor & Division Head of Computer Science, School of Computing and Data Science, The University of Hong Kong",
+        "tc": "香港大學計算與數據科學學院教授兼計算機科學分部主任",
+        "sc": "香港大学计算与数据科学学院教授兼计算机科学分部主任"
       },
       "website": "https://www.cs.hku.hk/people/academic-staff/ckcheng",
       "email": "ckcheng@cs.hku.hk"
     },
     {
-      "name": "Dr. Felix W.H. Chan",
+      "name": "Prof. Felix W.H. Chan",
       "ent": {
         "en": "Associate Professor, Faculty of Law, The University of Hong Kong",
         "tc": "香港大學法律學院副教授",
@@ -48,49 +48,96 @@
       "email": "fwhchan@hku.hk"
     },
     {
-      "name": "Mr. Eric T.M. Cheung",
+      "name": "Prof. Lingpeng Kong",
       "ent": {
-        "en": "Principal Lecturer, Faculty of Law, The University of Hong Kong",
-        "tc": "香港大學法律學院首席講師",
-        "sc": "香港大學法律學院首席講師"
+        "en": "Assistant Professor, School of Computing and Data Science, The University of Hong Kong",
+        "tc": "香港大學計算與數據科學學院助理教授",
+        "sc": "香港大学计算与数据科学学院助理教授"
       },
-      "website": "https://www.law.hku.hk/academic_staff/eric-cheung-t-m/",
-      "email": "etmc@hku.hk"
+      "website": "https://www.cs.hku.hk/index.php/people/academic-staff/lpk",
+      "email": "lpk@cs.hku.hk"
     },
     {
-      "name": "Dr. Clement Y.X. Chen",
-      "ent": {
-        "en": "Research Assistant Professor, Faculty of Law, The University of Hong Kong",
-        "tc": "香港大學法律學院助理教授〔研究〕",
-        "sc": "香港大学法律学院助理教授〔研究〕"
-      },
-      "website": "https://www.law.hku.hk/academic_staff/eric-cheung-t-m/",
-      "email": "yongxi.chen@anu.edu.au"
-    },
-    {
-      "name": "Mr. Michael M. K. Cheung",
+      "name": "Mr. Michael M.K. Cheung",
       "ent": {
         "en": "Research Officer, Law and Technology Centre, Faculty of Law, The University of Hong Kong",
         "tc": "香港大學法律學院法律與科技研究中心專職研究員",
-        "sc": "香港大學法律學院法律與科技研究中心專職研究員"
+        "sc": "香港大学法律学院法律与科技研究中心专职研究员"
       },
       "email": "michaelmkcheung@hku.hk"
+    },
+    {
+      "name": "Dr. Clement Yongxi Chen",
+      "ent": {
+        "en": "Lecturer, College of Law, Australian National University",
+        "tc": "澳洲國立大學法學院講師",
+        "sc": "澳洲国立大学法学院讲师"
+      },
+      "email": "yongxi.chen@anu.edu.au"
+    }
+  ],
+  "researchers": [
+    {
+      "name": "Dr. Tien-Hsuan Wu",
+      "ent": {
+        "en": "Lecturer, Faculty of Engineering, The University of Hong Kong",
+        "tc": "香港大學工程學院講師",
+        "sc": "香港大学工程学院讲师"
+      }
+    },
+    {
+      "name": "Ms. Joyce L.Y. Tan",
+      "ent": {
+        "en": "Project Manager, Law and Technology Centre, Faculty of Law, The University of Hong Kong",
+        "tc": "香港大學法律學院法律與科技研究中心項目經理",
+        "sc": "香港大学法律学院法律与科技研究中心项目经理"
+      }
+    },
+    {
+      "name": "Ms. Mingruo Yuan",
+      "ent": {
+        "en": "Ph.D. candidate, Department of Computer Science, Faculty of Engineering, The University of Hong Kong",
+        "tc": "香港大學工程學院計算機科學系博士研究生",
+        "sc": "香港大学工程学院计算机科学系博士研究生"
+      }
     }
   ],
   "students": [
-    "Au-Yeung Kai Tik, Dick",
-    "Tiffany Cheng",
-    "Chiu Lai Ka, Rita",
-    "Chan Hu Phong, Brian",
-    "Hui Kwan Yin, Kayson",
-    "Li Fung Kei, Colman",
-    "Liu Ka Man, Carmen",
-    "Lung Hoi Tat, James",
-    "Wong Hoi Ting, Daisy",
-    "Tien-Hsuan Wu, Kevin",
-    "Guowen Yuan",
-    "Yuen Ka Lam, Kendall",
-    "Yuen Lok Hang, Ryan",
-    "Yip Wai Man, Thomas"
+    "Chan Chun Wing, Marco",
+    "Chan Huen Tung Cheryl",
+    "Chan Kwan Yin Cheryl",
+    "Chan Lok Yiu, Yoyo",
+    "Chan Shun",
+    "Cheng Cheuk Nam Jason",
+    "Fu Wai Ching, Justin",
+    "Fung Hiu To, Hailey",
+    "Fung Wing Kan, Kenneth",
+    "Jonathan Lawrence Wong",
+    "Lai Hin Ching, Serena",
+    "Lai Hiu Lam, Tiffany",
+    "Lam Ka Ho",
+    "Lam Yau Long Jay",
+    "Lam Ying Tung Jamia",
+    "Lau Ka Yan, Jenny",
+    "Lau Kit Yu, Andrew",
+    "Leung Hoi Hei, Alfred",
+    "Li Man Ching Chloe",
+    "Li Wing Lam, Jessie",
+    "Li Yin Yin Lily",
+    "Lui Hang Ni, Tiffany",
+    "Lum Yu Him, Isaac",
+    "Or Ching Hang, Ronny",
+    "Pang Lok Ching, Anthea",
+    "Sien Brandon Siu Chung",
+    "So Yiu Hei, Michael",
+    "Tai Yat Yin, Justin",
+    "Tang Wai Yee, Melody",
+    "Tong Ching Nga, Tiffany",
+    "Tsang Suet Yiu, Yoyo",
+    "Wu Wing Ki, Ivy",
+    "Ye Xiyan, Thomas",
+    "Yim Sheung Chi Cyrus",
+    "Yiu Ka Lui, Kelly",
+    "Yu Jin Yee, Emily"
   ]
 }
