@@ -50,6 +50,8 @@
   "recommender_step3_feedback": "这个建议有帮助吗？",
   "recommender_step3_restart": "重新开始",
   "recommender_step3_tostep1": "返回并编辑步骤 1",
+  "recommender_step3_showing": "显示第 {from}-{to} 项，共 {total} 项推荐",
+  "recommender_step3_pagination": "推荐结果分页",
   "recommender_search_working_title": "正在查找相关问题...",
   "recommender_search_working_desc": "我们正在查找与您的情况相关的问题。",
   "recommender_search_waking_title": "正在准备搜索服务...",
@@ -83,11 +85,11 @@
   "close": "关闭",
   "recommender_step3_excerpt_note": "此摘录取自社区法网页面，并不构成对该问题的完整解答或详细说明。如欲查阅原文，请点击下方的“浏览页面”。",
   "disclaimer_body": [
-    "The information available at the Community Legal Information Centre (CLIC) and its related services (including the CLIC Recommender) is for preliminary reference only and should NOT be considered as legal advice. You should consult your own lawyer if you want to obtain further information or legal assistance concerning any specific legal matter.",
-    "The Community Legal Information Centre (CLIC) and its related services are operated by the Law & Technology Centre of the University of Hong Kong (the \"host University\").",
-    "\"CLIC data providers\" include, but are not limited to, the Judiciary of Hong Kong, the Department of Justice of the Hong Kong SAR Government, and the University of Hong Kong.",
-    "Neither CLIC, its host University, nor the CLIC data providers, encourage reliance on or accept responsibility for the information provided by CLIC. Any use or actions taken based on the information from CLIC are solely the responsibility of the users.",
-    "The contents of CLIC and its related services are provided as an informational guide only, and the information is presented on an \"as is\" basis. CLIC, its host University, and the CLIC data providers do not provide any guarantees, undertakings, or warranties regarding the accuracy, completeness, or currency of the information on CLIC and its related services. Users should verify information from another reliable source if it is of significant importance to them. For official versions of legal reference materials, users should refer to relevant official publications.",
-    "Hypertext links on CLIC are inserted by CLIC itself, not by the CLIC data providers. The insertion of hypertext links on CLIC is automated, and the links may not be comprehensive or accurate in all cases. CLIC, its host University, and the CLIC data providers do not provide any guarantees, undertakings, or warranties regarding the accuracy, comprehensiveness, or any other aspect of hypertext linking. Hypertext links merely provide useful connections between information in certain instances."
+    "社区法律信息中心（CLIC）及其相关服务（包括CLIC推荐工具）所提供的信息仅供初步参考，不应被视为法律建议。如需就任何具体法律事务获取进一步信息或法律协助，您应咨询自己的律师。",
+    "社区法律信息中心（CLIC）及其相关服务由香港大学法律与科技中心（\"主办大学\"）运营。",
+    "\"CLIC数据提供方\"包括但不限于香港司法机构、香港特别行政区政府律政司以及香港大学。",
+    "CLIC、其主办大学以及CLIC的数据提供方均不鼓励依赖CLIC提供的信息，也不对此承担任何责任。任何基于CLIC信息所采取的使用或行动，其责任完全由用户自行承担。",
+    "CLIC及其相关服务的内容仅作为信息指南提供，所呈现的信息均按“原样”提供。CLIC、其主办大学以及CLIC数据提供方均不对CLIC及其相关服务中信息的准确性、完整性或时效性作出任何保证、承诺或担保。若相关信息对用户具有重要意义，用户应通过其他可靠来源进行核实。如需获取法律参考资料的官方版本，用户应查阅相关官方出版物。",
+    "CLIC 上的超文本链接由 CLIC 自身插入，而非由 CLIC 数据提供方插入。CLIC 上超文本链接的插入是自动进行的，因此这些链接可能并非在所有情况下都全面或准确。CLIC、其主办大学以及 CLIC 数据提供方均不对超文本链接的准确性、全面性或任何其他方面作出任何保证、承诺或担保。超文本链接仅在某些情况下为信息之间提供有用的连接。"
   ]
 }

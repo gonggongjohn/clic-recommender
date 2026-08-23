@@ -90,7 +90,7 @@ const searchQuery = useSearchQueryState();
 const topics = useTopicState();
 const questions = useQuestionState();
 
-const { getUniqueTopicsSortByOccurances } = useClic();
+const { getRankedTopics } = useClic();
 const { t, locale } = useI18n();
 
 const loading = ref(false);
@@ -247,7 +247,7 @@ const search = async () => {
     });
 
     questions.value = results.questions;
-    topics.value = getUniqueTopicsSortByOccurances(results.questions);
+    topics.value = getRankedTopics(results);
 
     props.nextStep();
   } catch (error) {

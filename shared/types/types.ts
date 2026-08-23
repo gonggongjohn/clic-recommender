@@ -1,5 +1,8 @@
 export interface Info {
   answer: string;
+  q_id: string;
+  scope_q_score?: number;
+  q_score?: number;
   method: string;
   page: string | number;
   page_url: string;
@@ -20,6 +23,28 @@ export interface Question {
   real_index?: number[];
 }
 
+/**
+ * One entry of `results.topics.ranked`, ordered by relevance to the query.
+ * `primary` marks the topics that cleared the backend's relevance threshold;
+ * the rest were pulled in through group.csv topic grouping.
+ */
+export interface RankedTopic {
+  topic: string;
+  simplified_chinese_topic: string;
+  traditional_chinese_topic: string;
+  count: number;
+  score: number;
+  primary: boolean;
+}
+
+export interface Topics {
+  raw: Record<string, number>;
+  "top-ranked": string[];
+  filtered: string[];
+  /** Added by the backend alongside the legacy fields; older backends omit it. */
+  ranked?: RankedTopic[];
+}
+
 export interface Rating {
   search: string;
   question: string;
@@ -33,9 +58,13 @@ export interface Feedback {
   body: string;
 }
 
+export interface SearchResults {
+  key: string;
+  approach: string | null;
+  questions: Question[];
+  topics?: Topics;
+}
+
 export interface SearchResponse {
-  results: {
-    questions: Question[];
-    [key: string]: unknown;
-  };
+  results: SearchResults;
 }

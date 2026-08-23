@@ -35,7 +35,14 @@ export default defineNuxtConfig({
     logDir: process.env.LOG_DIR ?? "",
     public: {
       MAX_TOPIC_NUM: process.env.MAX_TOPIC_NUM ?? "5",
-      MAX_QUESTION_NUM: process.env.MAX_QUESTION_NUM ?? "5",
+      // Results per page in step 3.
+      QUESTIONS_PER_PAGE:
+        process.env.QUESTIONS_PER_PAGE ?? process.env.MAX_QUESTION_NUM ?? "5",
+      // Ceiling across all pages; "0" shows everything the backend returned.
+      MAX_QUESTION_TOTAL: process.env.MAX_QUESTION_TOTAL ?? "0",
+      // Deprecated: previously capped the total shown. Kept as a fallback for
+      // QUESTIONS_PER_PAGE so an existing deployment keeps its configured value.
+      MAX_QUESTION_NUM: process.env.MAX_QUESTION_NUM ?? "",
     },
   },
 

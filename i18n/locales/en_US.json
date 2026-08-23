@@ -50,6 +50,8 @@
   "recommender_step3_feedback": "Is this recommendation relevant?",
   "recommender_step3_restart": "Restart",
   "recommender_step3_tostep1": "Go back and edit step 1",
+  "recommender_step3_showing": "Showing {from}-{to} of {total} recommendations",
+  "recommender_step3_pagination": "Recommendation pages",
   "recommender_search_working_title": "Finding relevant questions...",
   "recommender_search_working_desc": "We're searching for questions that match your situation.",
   "recommender_search_waking_title": "Preparing the search service...",
