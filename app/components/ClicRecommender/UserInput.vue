@@ -91,6 +91,7 @@ const topics = useTopicState();
 const questions = useQuestionState();
 
 const { getRankedTopics } = useClic();
+const { logEvent, startSearch } = useEventLogger();
 const { t, locale } = useI18n();
 
 const loading = ref(false);
@@ -240,10 +241,17 @@ const search = async () => {
   errorMessage.value = "";
   startWaitingState();
 
+  const query = searchQuery.value.trim();
+  startSearch();
+  void logEvent({
+    event_type: "search",
+    query,
+  });
+
   try {
     const { results } = await $fetch("/api/search", {
       method: "POST",
-      body: { keyword: searchQuery.value },
+      body: { keyword: query },
     });
 
     questions.value = results.questions;

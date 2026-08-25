@@ -38,10 +38,13 @@
 const { locale } = useI18n();
 const props = defineProps(["nextStep"]);
 const topics = useTopicState();
+const searchQuery = useSearchQueryState();
+const filteredQuestions = useFilteredQuestionsState();
 
 const selectedTopics: Ref<string []> = ref([]);
 
 const { updateFilteredQuestions } = useClic();
+const { logEvent } = useEventLogger();
 
 const getTopic = (topic: string) => {
     // topic string e.g: Intellectual Property,知识产权,知識產權
@@ -64,6 +67,22 @@ const selectTopic = (topic: string) => {
 
 const getRecommendations = () => {
   updateFilteredQuestions(selectedTopics.value);
+
+  const questionIds = Array.from(
+    new Set(
+      filteredQuestions.value.flatMap((question) =>
+        question.detailed_info.map((info) => info.q_id).filter(Boolean),
+      ),
+    ),
+  );
+
+  void logEvent({
+    event_type: "questions",
+    query: searchQuery.value.trim(),
+    topics: [...selectedTopics.value],
+    question_ids: questionIds,
+  });
+
   props.nextStep();
 };
 </script>

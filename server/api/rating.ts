@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
   const text = `CLIC Recommender Rating Submission<br />
 UserInput: ${rating.search}<br />
 Question: ${rating.question}<br />
+Question ID: ${rating.question_id ?? ""}<br />
 Topic: ${rating.topic}<br />
 Content: ${rating.content}<br />
 Rating: ${rating.rating}<br />`;

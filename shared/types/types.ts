@@ -48,6 +48,7 @@ export interface Topics {
 export interface Rating {
   search: string;
   question: string;
+  question_id?: string;
   topic: string;
   content: string;
   rating: number;

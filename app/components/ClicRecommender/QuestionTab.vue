@@ -100,32 +100,57 @@ const rating = ref(0);
 const searchQuery = useSearchQueryState();
 
 const { getQuestionText, getScope, getTopic } = useClic();
+const { logEvent } = useEventLogger();
 
 const excerptToggle = () => {
   collapse.value = !collapse.value;
 };
 
-const rate = async () => {
-  if (rating.value !== 0) {
-    await $fetch(`/api/rating`, {
-      method: "POST",
-      body: {
-        search: searchQuery.value,
-        question: getQuestionText(props.question),
-        topic: getTopic(props.question),
-        content: getScope(props.question),
-        rating: rating.value,
-      },
-    });
-  }
+const rate = async (value: number) => {
+  if (value === 0) return;
+
+  const questionId = props.question.detailed_info[0]?.q_id ?? "";
+  const questionText = getQuestionText(props.question);
+
+  // Keep the existing Teams notification behavior while persisting the
+  // normalized analytics event separately. Either failure is non-fatal.
+  const notification = $fetch(`/api/rating`, {
+    method: "POST",
+    body: {
+      search: searchQuery.value,
+      question: questionText,
+      question_id: questionId,
+      topic: getTopic(props.question),
+      content: getScope(props.question),
+      rating: value,
+    },
+  }).catch((error) => {
+    console.warn("Rating notification failed", error);
+  });
+
+  const analytics = logEvent({
+    event_type: "rating",
+    query: searchQuery.value.trim(),
+    question_id: questionId,
+    question: questionText,
+    rating: value,
+  });
+
+  await Promise.allSettled([notification, analytics]);
 };
 
-const visit = async () => {
+const visit = () => {
   const url = getLink(props.question.detailed_info[0].page_url);
-  const contents = url.slice(url.indexOf(".hk/") + 1);
-  await $fetch(`/api/visit`, {
-    method: "POST",
-    body: { visit: contents },
+  const hkIndex = url.indexOf(".hk/");
+  const contents = hkIndex >= 0 ? url.slice(hkIndex + 1) : url;
+  const questionId = props.question.detailed_info[0]?.q_id ?? "";
+
+  // Do not block opening the destination page on analytics persistence.
+  void logEvent({
+    event_type: "visit",
+    query: searchQuery.value.trim(),
+    question_id: questionId,
+    clic_page: contents,
   });
 };
 
@@ -135,8 +160,8 @@ const getLink = (link: string) => {
   else return link;
 };
 
-watch(rating, async () => {
-  rate();
+watch(rating, (value) => {
+  void rate(value);
 });
 
 onMounted(() => {

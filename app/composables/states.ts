@@ -12,3 +12,10 @@ export const useQuestionState = () => useState<Question[]>("questions", () => []
 
 // all questions filtered by selected topics
 export const useFilteredQuestionsState = () => useState<Question[]>("filteredQuestions", () => [])
+
+// Random browser-session correlation ID used only for product analytics.
+export const useSessionIdState = () => useState<string>("sessionId", () => "")
+
+// Correlation ID for the currently submitted search. A fresh value is created
+// for every search so later topic/rating/visit events can be joined reliably.
+export const useSearchIdState = () => useState<string>("searchId", () => "")
