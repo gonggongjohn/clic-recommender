@@ -127,6 +127,15 @@ a {
 /* The vertical rail that links the numbered steps. */
 .clic-stepper .m-stepper__content {
   border-color: var(--clic-line-purple) !important;
+
+  box-sizing: border-box;
+  padding-inline-end: 2.5rem !important;
+}
+
+@media (max-width: 767px) {
+  .clic-stepper .m-stepper__content {
+    padding-inline-end: 1rem !important;
+  }
 }
 
 /* With every step open at once, maz-ui still dims the non-current headers.
