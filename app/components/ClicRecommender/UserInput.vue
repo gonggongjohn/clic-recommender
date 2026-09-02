@@ -23,6 +23,8 @@
         class="bg-pale-grey border border-grey-line rounded-lg xs:col-span-12 md:col-span-7"
         :placeholder="placeholder"
         :disabled="loading"
+        @focus="onSearchIntent"
+        @input="onSearchIntent"
       ></textarea>
 
       <ClicRecommenderSamples class="xs:col-span-12 md:col-span-5" />
@@ -93,6 +95,7 @@ const questions = useQuestionState();
 const { getRankedTopics } = useClic();
 const { logEvent, startSearch } = useEventLogger();
 const { t, locale } = useI18n();
+const { warmUp, isBackendReady } = useBackendWarmup();
 
 const loading = ref(false);
 const elapsedSeconds = ref(0);
@@ -112,6 +115,21 @@ const placeholder = computed(() =>
     t("recommender_tips.1"),
   ].join("\n\n")
 );
+
+/* ------------------------------------------------------------------ *
+ * Cold-start amortisation
+ * The backend Container App scales to zero, so the first search after an idle
+ * period would otherwise wait for a replica to boot and load its index. The
+ * app-start plugin already fires one warm-up ping; touching the search box is
+ * the strongest possible signal that a search is imminent, so re-ping here to
+ * cover the case where the user has been reading the page for a while.
+ *
+ * Fire-and-forget by design: nothing below is awaited and failures are
+ * swallowed inside the composable, so this can never delay or block typing.
+ * ------------------------------------------------------------------ */
+const onSearchIntent = () => {
+  void warmUp({ reason: "search-intent" });
+};
 
 /* ------------------------------------------------------------------ *
  * Voice input (Web Speech API)
@@ -169,6 +187,8 @@ onMounted(() => {
 const toggleListening = () => {
   if (!recognition) return;
 
+  onSearchIntent();
+
   if (listening.value) {
     recognition.stop();
     return;
@@ -197,14 +217,21 @@ onBeforeUnmount(() => {
 let elapsedTimer: ReturnType<typeof setInterval> | undefined;
 let waitingTipTimer: ReturnType<typeof setTimeout> | undefined;
 
+// If the warm-up ping never confirmed a loaded index, this search is paying
+// the cold start and the "waking up" wording is accurate straight away rather
+// than only after the 8s guess.
+const isColdStart = computed(
+  () => elapsedSeconds.value >= 8 || !isBackendReady.value
+);
+
 const waitingTitle = computed(() =>
-  elapsedSeconds.value >= 8
+  isColdStart.value
     ? t("recommender_search_waking_title")
     : t("recommender_search_working_title")
 );
 
 const waitingDescription = computed(() =>
-  elapsedSeconds.value >= 8
+  isColdStart.value
     ? t("recommender_search_waking_desc")
     : t("recommender_search_working_desc")
 );

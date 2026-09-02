@@ -33,7 +33,27 @@ export default defineNuxtConfig({
     backend: process.env.BACKEND ?? "",
     teams: process.env.TEAMS ?? "",
     logDir: process.env.LOG_DIR ?? "",
+    // How long /api/warmup holds the connection open waiting for a cold
+    // Container App replica to answer. Long on purpose: the browser never
+    // awaits this call, and the reply is how the client learns it can stop
+    // re-pinging. Only the server route reads this.
+    warmupTimeoutMs: process.env.WARMUP_TIMEOUT_MS ?? "20000",
     public: {
+      // Background wake-up ping for the scale-to-zero backend. Set
+      // NUXT_PUBLIC_WARMUP_ENABLED=false to switch the whole thing off.
+      WARMUP_ENABLED: process.env.WARMUP_ENABLED ?? "true",
+      // Minimum gap between unforced pings.
+      WARMUP_MIN_INTERVAL_MS: process.env.WARMUP_MIN_INTERVAL_MS ?? "60000",
+      // Keep-alive cadence. Must stay below the Container App scale-to-zero
+      // cooldown (300s by default) or the replica dies between pings.
+      WARMUP_KEEPALIVE_MS: process.env.WARMUP_KEEPALIVE_MS ?? "240000",
+      // Stop keeping the replica alive once the user has been idle this long,
+      // so an abandoned tab is allowed to let the container scale back down.
+      WARMUP_ACTIVITY_WINDOW_MS:
+        process.env.WARMUP_ACTIVITY_WINDOW_MS ?? "900000",
+      // Bounded retries while the backend is still cold or unreachable.
+      WARMUP_MAX_ATTEMPTS: process.env.WARMUP_MAX_ATTEMPTS ?? "4",
+      WARMUP_RETRY_DELAY_MS: process.env.WARMUP_RETRY_DELAY_MS ?? "5000",
       MAX_TOPIC_NUM: process.env.MAX_TOPIC_NUM ?? "5",
       // Results per page in step 3.
       QUESTIONS_PER_PAGE:
