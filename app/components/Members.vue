@@ -4,14 +4,14 @@
     <div>
       <div v-for="c in staff.coordinator" :key="c.name" class="my-3">
         <p>
-          <span class="font-bold">{{ c.name }}</span>
+          <span class="font-bold">{{ localised(c.name) }}</span>
           <span class="text-ink-soft"> ({{ localised(staff.coordinatorTitle) }})</span>
         </p>
         <p>{{ localised(c.ent) }}</p>
       </div>
 
       <div v-for="s in staff.staff" :key="s.name" class="my-3">
-        <p class="font-bold">{{ s.name }}</p>
+        <p class="font-bold">{{ localised(s.name) }}</p>
         <p>{{ localised(s.ent) }}</p>
       </div>
     </div>
@@ -23,7 +23,7 @@
       </h3>
 
       <div v-for="r in staff.researchers" :key="r.name" class="my-3">
-        <p class="font-bold">{{ r.name }}</p>
+        <p class="font-bold">{{ localised(r.name) }}</p>
         <p>{{ localised(r.ent) }}</p>
       </div>
     </div>
