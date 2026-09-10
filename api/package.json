@@ -1,0 +1,9 @@
+{
+  "name": "clic-curation-console-api",
+  "version": "1.0.0",
+  "description": "Exposes the BACKEND application setting to the static console.",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}

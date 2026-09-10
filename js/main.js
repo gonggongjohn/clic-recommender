@@ -1,6 +1,16 @@
 /* The shell: routing, the top bar, and the serving indicator. */
 
-import { BASE, BASE_SOURCE, IS_CONFIGURED, api, onSessionExpired, session } from "./api.js";
+import {
+  BASE,
+  BASE_SOURCE,
+  CONFIG_PROBLEM,
+  ENVIRONMENT_LABEL,
+  api,
+  initApiBase,
+  isConfigured,
+  onSessionExpired,
+  session,
+} from "./api.js";
 import { h, mount, notice, poller, toast, when } from "./dom.js";
 import { batchesView, batchView } from "./views/batches.js";
 import { peopleView, signInView } from "./views/people.js";
@@ -85,8 +95,8 @@ function watchServing() {
  * data you are about to publish to is worth the pixels.
  */
 function environmentTag() {
-  const label = (window.CLIC_CONSOLE_CONFIG || {}).environmentLabel;
-  if (label) return h("span.tag.tag-outline", label);
+  const label = ENVIRONMENT_LABEL || (window.CLIC_CONSOLE_CONFIG || {}).environmentLabel;
+  if (label) return h("span.tag.tag-outline", { title: BASE }, label);
   if (BASE_SOURCE === "url override") return h("span.tag.tag-pending", `API: ${BASE}`);
   if (BASE.startsWith("http")) {
     try {
@@ -214,22 +224,31 @@ function setupNeededView() {
           "div.sheet",
           h(
             "div.sheet-body",
-            notice("Nothing is broken — one setting is missing.", "warn"),
-            h("p", "Set apiBaseUrl in config.js at the root of this site:"),
+            notice(CONFIG_PROBLEM || "Nothing is broken — one setting is missing.", "warn"),
             h(
-              "pre.log",
-              'window.CLIC_CONSOLE_CONFIG = {\n' +
-                '  apiBaseUrl: "https://<your-container-app>/recommender/admin",\n' +
-                "};"
+              "p",
+              "On Azure Static Web Apps, set the backend address in the portal under ",
+              h("b", "Settings → Environment variables"),
+              ":"
             ),
+            h("pre.log", "BACKEND = https://<your-container-app>.azurecontainerapps.io"),
             h(
               "p.hint",
               { style: "margin-top:12px" },
-              "On Azure Static Web Apps with a linked backend, use /api/recommender/admin instead — the proxy removes the need for any CORS configuration."
+              "It takes effect on the next page load — nothing needs rebuilding or redeploying. Reload this page after saving."
             ),
             h(
               "p.hint",
-              "To try a backend without redeploying, add ?api=https://… to this page's address."
+              "On a static host with no API support, set apiBaseUrl in config.js instead."
+            ),
+            h(
+              "p.hint",
+              "To try a backend right now, add ?api=https://…/recommender/admin to this page's address."
+            ),
+            h(
+              "div.button-row",
+              { style: "margin-top:16px" },
+              h("button.primary", { onclick: () => window.location.reload() }, "Reload")
             )
           )
         )
@@ -242,7 +261,7 @@ async function start() {
   destroyCurrent();
   if (servingWatcher) servingWatcher.stop();
 
-  if (!IS_CONFIGURED) {
+  if (!isConfigured()) {
     setupNeededView();
     return;
   }
@@ -275,4 +294,8 @@ onSessionExpired((message) => {
   start();
 });
 
-start();
+// The API base has to be known before the first request, and on Static Web Apps
+// finding it means asking the managed function. Everything else waits.
+initApiBase()
+  .catch(() => {})
+  .then(start);

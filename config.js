@@ -1,39 +1,30 @@
 /*
-  Where the console finds its API.
+  Fallback API base.
 
-  Set at deploy time, not build time. There is no build step, so the same
-  artifact can be promoted between environments by overwriting this one file.
+  On Azure Static Web Apps you do not need this file. Set the backend address in
+  the portal instead:
 
-  Three ways to fill it in:
+      Static Web App -> Settings -> Environment variables
+      BACKEND = https://<your-container-app>.azurecontainerapps.io
 
-  1. Azure Static Web Apps with the container app linked as a backend.
-     The SWA proxies /api to the container, so requests are same-origin and
-     no CORS configuration is needed on the backend:
+  The managed function in api/config reads that setting and the console picks it
+  up at startup, so it can be changed without a redeploy.
 
-         apiBaseUrl: "/api/recommender/admin"
+  This file is only used when:
 
-  2. Any static host, talking to the container directly:
+    - the host cannot run the api/config function, in which case set
+      apiBaseUrl to the container's admin endpoint, for example
+      "https://<container-app>.azurecontainerapps.io/recommender/admin"; or
 
-         apiBaseUrl: "https://<container-app>.azurecontainerapps.io/recommender/admin"
+    - the backend is serving this page itself at /recommender/curation/, in
+      which case leave it empty — the console derives the base from its path.
 
-     Add this site's origin to ADMIN_CORS_ORIGINS on the container app.
-
-  3. The backend serving this page itself at /recommender/curation/.
-     Leave apiBaseUrl empty — the console derives the base from its own path
-     and this file is ignored.
-
-  In CI, generate this file rather than committing an environment's URL:
-
-      node scripts/write-config.mjs "$API_BASE_URL" "$ENVIRONMENT_LABEL" > config.js
-
-  To point a deployed console at a different backend without redeploying, add
-  ?api=https://… to the page's address. It lasts for that browser tab.
+  To point a deployed console at a different backend without changing anything,
+  add ?api=https://.../recommender/admin to the page's address. It lasts for
+  that browser tab.
 */
 
 window.CLIC_CONSOLE_CONFIG = {
-  apiBaseUrl: process.env.BACKEND ?? "",
-
-  // Shown in the top bar so nobody has to guess which backend a tab is pointed
-  // at. Worth setting when staging and production consoles look identical.
+  apiBaseUrl: "",
   environmentLabel: "",
 };

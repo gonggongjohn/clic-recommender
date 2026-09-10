@@ -1,9 +1,16 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/js/*", "/config.js", "/styles.css", "/*.{png,svg,ico,webmanifest}"]
+    "exclude": ["/api/*", "/js/*", "/config.js", "/styles.css", "/*.{png,svg,ico,webmanifest}"]
   },
   "routes": [
+    {
+      "route": "/api/config",
+      "allowedRoles": ["anonymous"],
+      "headers": {
+        "Cache-Control": "no-store, max-age=0"
+      }
+    },
     {
       "route": "/config.js",
       "headers": {
@@ -37,5 +44,8 @@
     "404": {
       "rewrite": "/index.html"
     }
+  },
+  "platform": {
+    "apiRuntime": "node:20"
   }
 }

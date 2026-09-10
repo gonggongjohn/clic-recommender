@@ -1,24 +1,30 @@
 /*
   Talking to the curation API.
 
-  The console can be hosted three ways, so the API base is resolved rather than
-  hard-coded:
+  Where the API lives is resolved at startup rather than hard-coded, because the
+  console is a static site and the backend's address is deployment
+  configuration:
 
-    1. Azure Static Web Apps with a linked backend — the container app is
-       proxied at /api, so the base is /api/recommender/admin.
-    2. Any static host, cross-origin — config.js carries the container's URL and
-       the backend allows that origin via ADMIN_CORS_ORIGINS.
-    3. Served by the backend itself at /recommender/curation/ — the base is the
-       /admin sibling of wherever this page is mounted.
+    1. ?api=… in the address bar — remembered for the tab, for pointing a
+       deployed console at another backend without redeploying.
+    2. GET /api/config — on Azure Static Web Apps this is a managed function
+       that echoes the BACKEND application setting. This is the one that lets
+       the address be changed in the Azure portal with no redeploy.
+    3. config.js — a file written at deploy time, for static hosts with no
+       function support.
+    4. Same-origin derivation, when the backend is serving this page itself at
+       /recommender/curation/.
 
-  Resolution order is: ?api= override, then config.js, then same-origin
-  derivation. If none apply the app says so plainly instead of firing requests
-  at a URL that was never configured.
+  If none apply the app shows a setup screen instead of firing requests at a URL
+  that was never configured.
 */
 
 const TOKEN_KEY = "clic.curation.token";
 const USER_KEY = "clic.curation.user";
 const API_OVERRIDE_KEY = "clic.curation.api";
+
+/** How long to wait for /api/config before falling back. */
+const RUNTIME_CONFIG_TIMEOUT_MS = 6000;
 
 /** Trailing slashes make every joined path double-slashed; strip them once here. */
 function tidy(base) {
@@ -30,7 +36,7 @@ function tidy(base) {
  *   .../recommender/curation/  ->  .../recommender/admin
  *   .../curation/              ->  .../admin
  * Returns "" when the page is not mounted under a /curation path, which is the
- * case on a static host and means config.js has to supply the base.
+ * case on a static host and means the base has to come from somewhere else.
  */
 function deriveFromPath() {
   const path = window.location.pathname.replace(/\/+$/, "");
@@ -38,9 +44,7 @@ function deriveFromPath() {
   return path.replace(/\/curation$/, "/admin") || "/admin";
 }
 
-function resolveBase() {
-  // An ?api= override is remembered for the tab, so a developer can point a
-  // deployed console at a local backend without editing anything.
+function readOverride() {
   const requested = new URLSearchParams(window.location.search).get("api");
   if (requested !== null) {
     try {
@@ -49,23 +53,90 @@ function resolveBase() {
     } catch { /* ignore */ }
   }
   try {
-    const stored = sessionStorage.getItem(API_OVERRIDE_KEY);
-    if (stored) return { base: tidy(stored), source: "url override" };
-  } catch { /* ignore */ }
-
-  const configured = tidy((window.CLIC_CONSOLE_CONFIG || {}).apiBaseUrl);
-  if (configured) return { base: configured, source: "config.js" };
-
-  const derived = deriveFromPath();
-  if (derived) return { base: derived, source: "same origin" };
-
-  return { base: "", source: "unconfigured" };
+    return tidy(sessionStorage.getItem(API_OVERRIDE_KEY));
+  } catch {
+    return "";
+  }
 }
 
-const resolved = resolveBase();
-export const BASE = resolved.base;
-export const BASE_SOURCE = resolved.source;
-export const IS_CONFIGURED = Boolean(BASE);
+/**
+ * Ask the Static Web App's managed function for the BACKEND setting.
+ *
+ * Absent on static hosts with no functions, so a 404 is an ordinary outcome and
+ * falls through quietly. A slow or hanging function must not stall the whole
+ * app, hence the timeout.
+ */
+async function readRuntimeConfig() {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), RUNTIME_CONFIG_TIMEOUT_MS);
+  try {
+    const response = await fetch("/api/config", {
+      signal: controller.signal,
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return payload && typeof payload === "object" ? payload : null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// Live bindings: these are reassigned by initApiBase() before the app starts,
+// and every importing module sees the updated value.
+export let BASE = "";
+export let BASE_SOURCE = "unconfigured";
+export let CONFIG_PROBLEM = null;
+export let ENVIRONMENT_LABEL = "";
+
+export function isConfigured() {
+  return Boolean(BASE);
+}
+
+/** Resolve the API base. Called once, before anything renders. */
+export async function initApiBase() {
+  const override = readOverride();
+  if (override) {
+    BASE = override;
+    BASE_SOURCE = "url override";
+    return BASE;
+  }
+
+  const runtime = await readRuntimeConfig();
+  if (runtime) {
+    ENVIRONMENT_LABEL = runtime.environmentLabel || "";
+    if (runtime.apiBaseUrl) {
+      BASE = tidy(runtime.apiBaseUrl);
+      BASE_SOURCE = "BACKEND setting";
+      return BASE;
+    }
+    // The function is deployed but the setting is missing or malformed. That is
+    // worth repeating verbatim: it names the exact thing to fix in the portal.
+    CONFIG_PROBLEM = runtime.problem || null;
+  }
+
+  const configured = tidy((window.CLIC_CONSOLE_CONFIG || {}).apiBaseUrl);
+  if (configured) {
+    BASE = configured;
+    BASE_SOURCE = "config.js";
+    ENVIRONMENT_LABEL = ENVIRONMENT_LABEL || (window.CLIC_CONSOLE_CONFIG || {}).environmentLabel || "";
+    return BASE;
+  }
+
+  const derived = deriveFromPath();
+  if (derived) {
+    BASE = derived;
+    BASE_SOURCE = "same origin";
+    return BASE;
+  }
+
+  BASE = "";
+  BASE_SOURCE = "unconfigured";
+  return BASE;
+}
 
 export const session = {
   get token() {
