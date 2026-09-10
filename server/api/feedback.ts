@@ -39,13 +39,14 @@ export default defineEventHandler(async (event) => {
   await $fetch(`${backendBaseUrl}/recommender/feedback`, {
     method: "POST",
     body: { sender, body },
+    headers: buildBackendHeaders(event),
   });
 
   // Optional Teams notification.
   const teams = process.env.NUXT_TEAMS ?? process.env.TEAMS ?? config.teams;
 
   if (teams) {
-    const text = `CLIC Recommender Feedback Form Submission<br />
+    const text = `CLIC Recommender Feedback Form Submission (${resolveSiteId(event)})<br />
 Sender: ${sender}<br />
 Body:<br />
 ${body}`;

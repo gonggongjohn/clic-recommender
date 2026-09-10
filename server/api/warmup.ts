@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       // client learns the index is loaded and stops re-pinging.
       timeout: timeoutMs,
       retry: 0,
-      headers: { "x-warmup": "1" },
+      headers: { ...buildBackendHeaders(event), "x-warmup": "1" },
     });
 
     return {

@@ -13,12 +13,15 @@ export default defineEventHandler((event) => {
   const startedAt = Date.now();
   const method = event.node.req.method ?? event.method;
   const url = event.node.req.url ?? "";
+  // Both Static Web Apps stream into the same Log Analytics workspace, so the
+  // site tag is what makes a line attributable to one of them.
+  const site = resolveSiteId(event);
 
   event.node.res.once("finish", () => {
     const durationMs = Date.now() - startedAt;
     const status = event.node.res.statusCode;
     const level = status >= 500 ? "error" : status >= 400 ? "warn" : "info";
-    const message = `[http] ${method} ${url} ${status} ${durationMs}ms`;
+    const message = `[http] [${site}] ${method} ${url} ${status} ${durationMs}ms`;
 
     if (level === "error") console.error(message);
     else if (level === "warn") console.warn(message);

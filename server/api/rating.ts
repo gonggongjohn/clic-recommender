@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     return { ok: true };
   }
 
-  const text = `CLIC Recommender Rating Submission<br />
+  const text = `CLIC Recommender Rating Submission (${resolveSiteId(event)})<br />
 UserInput: ${rating.search}<br />
 Question: ${rating.question}<br />
 Question ID: ${rating.question_id ?? ""}<br />

@@ -33,12 +33,32 @@ export default defineNuxtConfig({
     backend: process.env.BACKEND ?? "",
     teams: process.env.TEAMS ?? "",
     logDir: process.env.LOG_DIR ?? "",
+    // Which Static Web App this build is serving. The two deployments run the
+    // SAME codebase and differ only in these settings, so content and feature
+    // changes ship to both without a second branch to keep in sync.
+    //
+    //   original site : leave unset (behaves as "main")
+    //   course site   : SITE_ID=course
+    //
+    // Must match a key in the backend's LOG_SITE_TABLES.
+    siteId: process.env.SITE_ID ?? "main",
+    // Shared secret proving to the backend that this really is one of our
+    // frontends, which is what lets it trust the forwarded client IP. Server
+    // side only: never place this under `public`.
+    analyticsIngestKey: process.env.ANALYTICS_INGEST_KEY ?? "",
     // How long /api/warmup holds the connection open waiting for a cold
     // Container App replica to answer. Long on purpose: the browser never
     // awaits this call, and the reply is how the client learns it can stop
     // re-pinging. Only the server route reads this.
     warmupTimeoutMs: process.env.WARMUP_TIMEOUT_MS ?? "20000",
     public: {
+      // Exposed so the client can tag events; the server route re-stamps the
+      // value from `siteId` above before forwarding, so this is a hint only.
+      SITE_ID: process.env.SITE_ID ?? "main",
+      // Attach the browser-reported device profile (form factor, screen,
+      // timezone, persistent device id) to analytics events. Off by default so
+      // the original site is unchanged; set to "true" on the course site.
+      DEVICE_TELEMETRY_ENABLED: process.env.DEVICE_TELEMETRY_ENABLED ?? "false",
       // Background wake-up ping for the scale-to-zero backend. Set
       // NUXT_PUBLIC_WARMUP_ENABLED=false to switch the whole thing off.
       WARMUP_ENABLED: process.env.WARMUP_ENABLED ?? "true",

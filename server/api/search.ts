@@ -27,7 +27,11 @@ export default defineEventHandler(async (event) => {
       method: "POST",
       body: {
         keyword,
-      }
+      },
+      // Site tag only. No client context: a legal search query has no business
+      // travelling alongside the visitor's IP, and the backend does not log
+      // search requests to Table Storage anyway.
+      headers: buildBackendHeaders(event),
     },
   );
 });
