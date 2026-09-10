@@ -41,6 +41,13 @@ const SLOTS = {
     description:
       "The step 2 workbook after review, with Revised_English, Revised_Chinese and Removed filled in. Split into parts is fine.",
   },
+  step3_output: {
+    label: "Finished step 3 output",
+    extensions: [".json", ".zip"],
+    multiple: true,
+    description:
+      "Files named the way the standalone scripts name them — question_batch_22.json, scope_batch_22_en.json — are recognised too.",
+  },
   step3_segmentation: {
     label: "Passage segmentation",
     extensions: [".json", ".zip"],
@@ -419,7 +426,7 @@ export function batchView(root, jobId, { user, onChanged }) {
       { id: "panel-publish", class: job.status === "published" ? "sheet spined state-approved" : "sheet spined" },
       h(
         "div.sheet-head",
-        h("h2", "4. Publish"),
+        h("h2", job.mode === "import" ? "3. Publish" : "4. Publish"),
         job.status === "published" ? tag(`Published as ${job.published_version}`, "seal") : tag("Not published", "neutral")
       ),
       body
@@ -439,7 +446,15 @@ export function batchView(root, jobId, { user, onChanged }) {
     }
 
     if (!job.gates.can_publish) {
-      mount(body, h("p.hint", "Finish step 3 to merge this batch into a new data version."));
+      mount(
+        body,
+        h(
+          "p.hint",
+          job.mode === "import"
+            ? "Import the step 3 output to merge this batch into a new data version."
+            : "Finish step 3 to merge this batch into a new data version."
+        )
+      );
       return panel;
     }
 
@@ -560,6 +575,325 @@ export function batchView(root, jobId, { user, onChanged }) {
     });
   }
 
+  /* ----------------------------------------------------------------- import */
+
+  function importPanel() {
+    const state = job.steps.step3 || { state: "pending" };
+    const imported = Boolean(state.run && state.run.imported);
+    const resultHost = h("div");
+    const uploads = job.uploads.step3_output || [];
+
+    async function runCheck({ silent = false } = {}) {
+      if (!uploads.length) {
+        mount(resultHost);
+        return null;
+      }
+      if (!silent) mount(resultHost, h("div.loading", "Checking the files…"));
+      try {
+        const report = await api.checkImport(job.id);
+        renderReport(report);
+        return report;
+      } catch (error) {
+        mount(resultHost, notice(error.message, "bad"));
+        return null;
+      }
+    }
+
+    function renderReport(report, { afterImport = false } = {}) {
+      const blocks = [];
+
+      if (report.errors && report.errors.length) {
+        blocks.push(
+          h(
+            "div.notice.notice-bad",
+            h("b", report.errors.length === 1 ? "This cannot be imported" : `${report.errors.length} problems stop this import`),
+            h("ul", report.errors.map((line) => h("li", line)))
+          )
+        );
+      } else if (!afterImport) {
+        blocks.push(notice("These files can be imported.", "good"));
+      }
+
+      if (report.warnings && report.warnings.length) {
+        blocks.push(
+          h(
+            "div.notice.notice-warn",
+            h("b", "Worth checking first"),
+            h("ul", report.warnings.map((line) => h("li", line)))
+          )
+        );
+      }
+
+      const summary = report.summary || {};
+      if (summary.questions !== undefined) {
+        blocks.push(
+          h(
+            "div.stats",
+            { style: "margin-top:14px" },
+            stat("Questions", count(summary.questions)),
+            stat("Answer entries", count(summary.scope_en)),
+            stat("Chinese entries", count(summary.scope_zh), summary.has_chinese ? "" : "warn"),
+            stat("Pages", count(summary.pages)),
+            summary.dangling_scope_refs
+              ? stat("No answer text", count(summary.dangling_scope_refs), "bad")
+              : null
+          )
+        );
+      }
+
+      if (report.files && report.files.questions) {
+        blocks.push(
+          h(
+            "p.hint",
+            { style: "margin-top:12px" },
+            `Read as — questions: ${report.files.questions}; English: ${report.files.scope_en || "none"}; Chinese: ${report.files.scope_zh || "none"}.`
+          )
+        );
+      }
+
+      if (report.ok && !afterImport && job.status !== "published") {
+        blocks.push(
+          h(
+            "div.button-row",
+            { style: "margin-top:14px" },
+            h(
+              "button.primary",
+              {
+                onclick: async (event) => {
+                  event.currentTarget.disabled = true;
+                  try {
+                    const result = await api.runImport(job.id);
+                    toast("Imported. Review the data, then publish.", "good");
+                    await refresh();
+                  } catch (error) {
+                    toast(error.message, "bad");
+                    event.currentTarget.disabled = false;
+                    await runCheck({ silent: true });
+                  }
+                },
+              },
+              imported ? "Replace the imported data" : "Import these files"
+            )
+          )
+        );
+      }
+
+      mount(resultHost, blocks);
+    }
+
+    const body = h(
+      "div.sheet-body",
+      h(
+        "p.hint",
+        "Upload the three files step 3 produces — questions.json, scope_en.json and scope_zh.json, or a zip of them. They are checked before anything is written, and nothing is imported unless every check passes."
+      ),
+      imported
+        ? notice(
+            `Imported by ${state.run.started_by} ${when(state.run.finished_at)}. ` +
+              "Review the data below, then publish.",
+            "good"
+          )
+        : null,
+      uploadSlot({
+        job,
+        slot: "step3_output",
+        spec: SLOTS.step3_output,
+        disabled: job.status === "published",
+        onChange: async () => {
+          await refresh();
+        },
+      }),
+      uploads.length
+        ? h(
+            "div.button-row",
+            { style: "margin-top:14px" },
+            h("button", { onclick: () => runCheck() }, "Check the files")
+          )
+        : null,
+      resultHost
+    );
+
+    const panel = h(
+      `div.sheet.spined.${imported ? "state-succeeded" : "state-pending"}`,
+      { id: "panel-import" },
+      h(
+        "div.sheet-head",
+        h("h2", "1. Import finished data"),
+        imported ? tag("Imported", "seal") : tag("Nothing imported", "neutral"),
+        job.mode === "import" && !imported && job.status !== "published"
+          ? h(
+              "button.quiet.small",
+              {
+                onclick: async () => {
+                  try {
+                    await api.setMode(job.id, "pipeline");
+                    toast("Switched to running the pipeline.");
+                    await refresh();
+                  } catch (error) {
+                    toast(error.message, "bad");
+                  }
+                },
+              },
+              "Run the pipeline instead"
+            )
+          : null
+      ),
+      body,
+      imported
+        ? h(
+            "div.sheet-foot",
+            h("span.spacer"),
+            ...reviewControlsFor("step3")
+          )
+        : null
+    );
+
+    // Show the last check automatically, so reopening a batch does not look
+    // like nothing was ever verified.
+    if (uploads.length) runCheck({ silent: true });
+
+    return panel;
+  }
+
+  /**
+   * The sign-off control, shared by the import panel and the step panels.
+   *
+   * Importing skips the machine steps but not the review: the data still has to
+   * be read by a person before it can become a published version.
+   */
+  function reviewControlsFor(step) {
+    const state = job.steps[step] || {};
+    if (state.approved) {
+      return [
+        h("span.hint", `Signed off by ${state.approved_by} · ${when(state.approved_at)}`),
+        h(
+          "button.small",
+          {
+            onclick: async () => {
+              await api.approveStep(job.id, step, false);
+              toast("Sign-off withdrawn.");
+              await refresh();
+            },
+          },
+          "Withdraw sign-off"
+        ),
+      ];
+    }
+    if (state.state !== "succeeded") return [];
+    return [
+      h(
+        "button.seal",
+        {
+          onclick: () =>
+            confirmAction({
+              title: "Sign off this data?",
+              body: "This records that you have reviewed it and unlocks publishing.",
+              confirmLabel: "Sign off",
+              onConfirm: async () => {
+                await api.approveStep(job.id, step, true);
+                toast("Signed off.", "good");
+                await refresh();
+              },
+            }),
+        },
+        "I have reviewed this"
+      ),
+    ];
+  }
+
+  /**
+   * Offered only on an untouched batch.
+   *
+   * Once a step has run, switching would strand its output, and the choice is
+   * no longer a real one.
+   */
+  function pipelineSwitchNotice() {
+    const untouched =
+      job.status !== "published" &&
+      Object.values(job.steps).every((state) => state.state === "pending") &&
+      !job.gates.step1_has_output;
+    if (!untouched) return null;
+
+    return h(
+      "div.notice",
+      { style: "margin-bottom:16px" },
+      h("span", "Already have the output of step 3 from somewhere else? "),
+      h(
+        "button.small",
+        {
+          style: "margin-left:8px",
+          onclick: async () => {
+            try {
+              await api.setMode(job.id, "import");
+              toast("Switched to importing finished data.");
+              await refresh();
+            } catch (error) {
+              toast(error.message, "bad");
+            }
+          },
+        },
+        "Import it instead"
+      )
+    );
+  }
+
+  function importGateStrip() {
+    const gates = job.gates;
+    const state = job.steps.step3 || {};
+
+    let importClass = "is-ready";
+    let importNote = "Upload the three files";
+    if (gates.imported) {
+      importClass = "is-done";
+      importNote = "Files imported";
+    }
+
+    let reviewClass = "is-blocked";
+    let reviewNote = "Import the files first";
+    if (state.approved) {
+      reviewClass = "is-done";
+      reviewNote = `Signed off by ${state.approved_by}`;
+    } else if (gates.imported) {
+      reviewClass = "is-review";
+      reviewNote = "Waiting for your review";
+    }
+
+    let publishClass = "is-blocked";
+    let publishNote = "Review the data first";
+    if (job.status === "published") {
+      publishClass = "is-done";
+      publishNote = `Published as ${job.published_version}`;
+    } else if (gates.can_publish) {
+      publishClass = "is-ready";
+      publishNote = "Ready to merge into a new version";
+    }
+
+    const cells = [
+      ["1", "Import", importClass, importNote, "import"],
+      ["2", "Review", reviewClass, reviewNote, "import"],
+      ["3", "Publish", publishClass, publishNote, "publish"],
+    ];
+
+    return h(
+      "div.gates",
+      { style: "grid-template-columns: repeat(3, 1fr)" },
+      cells.map(([number, name, className, note, anchor]) =>
+        h(
+          `button.gate.${className}`,
+          {
+            onclick: () => {
+              const target = document.getElementById(`panel-${anchor}`);
+              if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+            },
+          },
+          h("span.gate-n", number),
+          h("span.gate-name", name),
+          h("span.gate-note", note)
+        )
+      )
+    );
+  }
+
   /* ----------------------------------------------------------------- render */
 
   function render() {
@@ -600,10 +934,16 @@ export function batchView(root, jobId, { user, onChanged }) {
       )
     );
 
+    if (job.mode === "import") {
+      mount(host, head, importGateStrip(), importPanel(), publishPanel());
+      return;
+    }
+
     mount(
       host,
       head,
       gateStrip(),
+      pipelineSwitchNotice(),
       h("div", { id: "panel-step1" }, step1Panel()),
       h("div", { id: "panel-step2" }, step2Panel()),
       h("div", { id: "panel-step3" }, step3Panel()),
@@ -633,6 +973,17 @@ export function batchesView(root, { user }) {
     const label = h("input", { type: "text", placeholder: "Batch_24" });
     const ids = h("input", { type: "text", placeholder: "2630-2700" });
     const notes = h("textarea", { placeholder: "Anything the next person should know." });
+    const mode = h(
+      "select",
+      h("option", { value: "pipeline" }, "Run the pipeline — write, translate and build the data"),
+      h("option", { value: "import" }, "Import finished step 3 output I already have")
+    );
+
+    // The page-id field only means anything when the pipeline will run.
+    const idsField = field("Page ids", ids, "You can change these before running step 1.");
+    mode.addEventListener("change", () => {
+      idsField.style.display = mode.value === "import" ? "none" : "";
+    });
 
     modal({
       title: "Start a batch",
@@ -640,7 +991,8 @@ export function batchesView(root, { user }) {
         "div",
         field("Name", name, "What your team calls this batch."),
         field("Sheet label", label, "Used for the sheet name in the step 2 workbook and the File column, such as Batch_24."),
-        field("Page ids", ids, "You can change these before running step 1."),
+        field("How will the data be produced?", mode),
+        idsField,
         field("Notes", notes)
       ),
       actions: (close) => [
@@ -657,6 +1009,7 @@ export function batchesView(root, { user }) {
                   batch_label: label.value.trim() || name.value.trim(),
                   id_spec: ids.value.trim(),
                   notes: notes.value,
+                  mode: mode.value,
                 });
                 close();
                 window.location.hash = `#/batches/${job.id}`;
@@ -674,6 +1027,11 @@ export function batchesView(root, { user }) {
 
   function statusTag(job) {
     if (job.status === "published") return tag(`Published ${job.published_version}`, "seal");
+    if (job.mode === "import") {
+      if (job.gates.can_publish && job.steps.step3.approved) return tag("Ready to publish", "live");
+      if (job.gates.imported) return tag("Imported, awaiting review", "pending");
+      return tag("Waiting for files", "neutral");
+    }
     const running = Object.entries(job.steps).find(([, state]) => state.state === "running");
     if (running) return tag(`Running step ${running[0].slice(-1)}`, "live", { pulse: true });
     const failed = Object.entries(job.steps).find(([, state]) => ["failed", "interrupted"].includes(state.state));
@@ -717,7 +1075,10 @@ export function batchesView(root, { user }) {
                       h("tr.clickable", { onclick: () => { window.location.hash = `#/batches/${job.id}`; } },
                         h("td",
                           h("b", job.name),
-                          h("span.cell-sub", `${job.batch_label} · ${job.created_by}`)
+                          h("span.cell-sub",
+                            `${job.batch_label} · ${job.created_by}` +
+                              (job.mode === "import" ? " · imported" : "")
+                          )
                         ),
                         h("td", statusTag(job)),
                         h("td.nowrap", when(job.created_at)),

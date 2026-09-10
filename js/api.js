@@ -279,6 +279,10 @@ export const api = {
   deleteUpload: (id, slot, name) =>
     remove(`/jobs/${id}/uploads/${slot}/${encodeURIComponent(name)}`),
 
+  checkImport: (id) => get(`/jobs/${id}/import/check`),
+  runImport: (id) => post(`/jobs/${id}/import`),
+  setMode: (id, mode) => post(`/jobs/${id}/mode`, { mode }),
+
   runStep: (id, step, options) => post(`/jobs/${id}/steps/${step}/run`, options),
   cancelStep: (id, step) => post(`/jobs/${id}/steps/${step}/cancel`),
   approveStep: (id, step, approved) => post(`/jobs/${id}/steps/${step}/approve`, { approved }),
