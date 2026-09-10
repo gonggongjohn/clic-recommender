@@ -31,7 +31,7 @@
 */
 
 window.CLIC_CONSOLE_CONFIG = {
-  apiBaseUrl: "",
+  apiBaseUrl: process.env.BACKEND ?? "",
 
   // Shown in the top bar so nobody has to guess which backend a tab is pointed
   // at. Worth setting when staging and production consoles look identical.
