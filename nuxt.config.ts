@@ -34,8 +34,8 @@ const siteId = (process.env.NUXT_PUBLIC_SITE_ID ?? process.env.SITE_ID ?? "main"
 
 /** Default base path per deployment. Override with NUXT_APP_BASE_URL/BASE_URL. */
 const SITE_BASE_URLS: Record<string, string> = {
-  main: "/recommender/",
-  course: "/recommender-cle/",
+  main: "/recommender",
+  course: "/recommender-cle",
 };
 
 /**
