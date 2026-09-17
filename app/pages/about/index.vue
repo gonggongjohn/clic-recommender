@@ -17,26 +17,7 @@
       <Members />
     </div>
 
-    <!--
-      The live site keeps funding acknowledgement on its own /acknowledgement
-      page. Here it is a section with an anchor, because the footer links to
-      /about#acknowledgement.
-    -->
-    <div id="acknowledgement" class="col-span-12 scroll-mt-24">
-      <h2 class="font-display text-3xl font-bold text-dark-purple mb-3">
-        {{ $t("about_ack_title") }}
-      </h2>
-
-      <p class="max-w-prose leading-relaxed">{{ $t("about_ack_body") }}</p>
-
-      <NuxtImg
-        src="/wyng_foundation_logo.jpg"
-        :alt="$t('about_ack_logo_alt')"
-        :title="$t('about_ack_logo_alt')"
-        width="300"
-        class="mt-6"
-      />
-    </div>
+    <!-- Funding acknowledgement lives on its own page, at /acknowledgement. -->
   </div>
 </template>
 

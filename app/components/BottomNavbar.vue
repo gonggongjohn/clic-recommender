@@ -65,16 +65,15 @@
 <script setup lang="ts">
 import { links } from "@/data/links";
 
-// Mirrors the live site's footer. Privacy Policy and Acknowledgement are
-// sections inside existing pages rather than routes of their own.
+// Mirrors the live site's footer. Every entry is a page of its own.
 const footerLinks = [
   { to: "/", label: "nav_home" },
   { to: "/about", label: "nav_about" },
   { to: "/instructions", label: "nav_howto" },
   { to: "/terms", label: "nav_terms" },
   { to: "/disclaimer", label: "nav_disclaimer" },
-  { to: "/terms#privacy", label: "nav_privacy" },
-  { to: "/about#acknowledgement", label: "nav_acknowledgement" },
+  { to: "/privacy", label: "nav_privacy" },
+  { to: "/acknowledgement", label: "nav_acknowledgement" },
   { to: "/feedback", label: "nav_feedback" },
 ];
 </script>
