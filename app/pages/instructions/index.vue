@@ -111,7 +111,7 @@
     class="bg-pale-purple rounded-2xl mt-8 py-10 grid gap-8 items-center xs:px-6 xs:grid-cols-1 md:px-10 md:grid-cols-2"
   >
     <NuxtImg
-      src="/howto/feedback.png"
+      :src="publicAssetUrl('/howto/feedback.png')"
       :alt="$t('howto_feedback_alt')"
       width="875"
       height="573"
@@ -154,7 +154,7 @@ const features = computed(() =>
   list("howto_feature_titles").map((title, i) => ({
     title,
     body: list("howto_feature_bodies")[i] ?? "",
-    image: `/howto/feature${i + 1}.png`,
+    image: publicAssetUrl(`/howto/feature${i + 1}.png`),
   }))
 );
 
@@ -170,7 +170,7 @@ const steps = computed(() =>
   list("howto_step_titles").map((title, i) => ({
     title,
     body: list("howto_step_bodies")[i] ?? "",
-    image: `/howto/step${i + 1}.png`,
+    image: publicAssetUrl(`/howto/step${i + 1}.png`),
     icon: stepIcons[i] ?? "mdi-circle-small",
   }))
 );

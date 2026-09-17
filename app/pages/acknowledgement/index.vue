@@ -11,7 +11,7 @@
     <p class="max-w-prose leading-relaxed">{{ $t("about_ack_body") }}</p>
 
     <NuxtImg
-      src="/wyng_foundation_logo.jpg"
+      :src="publicAssetUrl('/wyng_foundation_logo.jpg')"
       :alt="$t('about_ack_logo_alt')"
       :title="$t('about_ack_logo_alt')"
       width="300"

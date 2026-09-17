@@ -1,6 +1,7 @@
 <template>
   <div
     class="flex flex-col justify-center items-center gap-6 py-16 bg-start bg-center bg-cover"
+    :style="{ '--start-bg-image': backgroundImage }"
   >
     <div class="font-display text-5xl xs:text-3xl font-bold text-center text-white px-6">
       {{ $t("start_title") }}
@@ -15,6 +16,11 @@
   </div>
 </template>
 
+<script setup lang="ts">
+/** See the note in layouts/default.vue - public/ URLs need the base path. */
+const backgroundImage = `url("${publicAssetUrl("/background.jpg")}")`;
+</script>
+
 <style scoped>
 .bg-start {
   /* Brand-purple scrim over the photo so the white headline stays legible.
@@ -24,6 +30,6 @@
       rgba(48, 22, 81, 0.88),
       rgba(48, 22, 81, 0.72)
     ),
-    url(/background.jpg);
+    var(--start-bg-image);
 }
 </style>

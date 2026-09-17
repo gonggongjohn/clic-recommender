@@ -31,7 +31,7 @@
         <div class="flex items-center xs:flex-wrap xs:justify-center gap-6">
           <NuxtLink :to="links.clic" target="_blank" class="shrink-0">
             <NuxtImg
-              src="/favicon.ico"
+              :src="publicAssetUrl('/favicon.ico')"
               :alt="$t('title')"
               :title="$t('title')"
               width="72"
@@ -40,7 +40,7 @@
 
           <NuxtLink :to="links.lawTech" target="_blank" class="shrink-0">
             <NuxtImg
-              src="/lawtech_logo.png"
+              :src="publicAssetUrl('/lawtech_logo.png')"
               :alt="$t('lawtech')"
               :title="$t('lawtech')"
               width="290"

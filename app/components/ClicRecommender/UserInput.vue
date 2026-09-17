@@ -276,7 +276,7 @@ const search = async () => {
   });
 
   try {
-    const { results } = await $fetch("/api/search", {
+    const { results } = await $fetch(apiUrl("/api/search"), {
       method: "POST",
       body: { keyword: query },
     });

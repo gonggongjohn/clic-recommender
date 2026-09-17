@@ -60,6 +60,13 @@ export const useBackendWarmup = () => {
   const enabled =
     String(config.public.WARMUP_ENABLED ?? "true").toLowerCase() !== "false";
 
+  /**
+   * Resolved once, here, rather than inside `ping`: the keep-alive timer fires
+   * from a bare `setTimeout` with no Nuxt instance attached, and the base path
+   * cannot change for the life of the page anyway.
+   */
+  const warmupEndpoint = apiUrl("/api/warmup");
+
   /** Don't re-ping more often than this unless `force` is set. */
   const minIntervalMs = numeric(config.public.WARMUP_MIN_INTERVAL_MS, 60_000);
   /**
@@ -97,7 +104,7 @@ export const useBackendWarmup = () => {
     backendWarming.value = true;
 
     try {
-      const result = await $fetch<WarmupResult>("/api/warmup", {
+      const result = await $fetch<WarmupResult>(warmupEndpoint, {
         method: "GET",
         // The route already resolves errors into `{ ok: false }`; belt and
         // braces so a 502 from the platform cannot reject either.

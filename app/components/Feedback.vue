@@ -88,7 +88,7 @@ const submit = async () => {
   status.value = null;
 
   try {
-    await $fetch("/api/feedback", {
+    await $fetch(apiUrl("/api/feedback"), {
       method: "POST",
       body: { sender: sender.value.trim(), body: body.value.trim() },
     });

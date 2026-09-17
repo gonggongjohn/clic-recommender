@@ -4,7 +4,7 @@
       <div class="grid xs:grid-cols-1 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <!-- Product shot, flush to the card edge as on the live site -->
         <NuxtImg
-          src="/survey.png"
+          :src="publicAssetUrl('/survey.png')"
           :alt="$t('survey_image_alt')"
           width="562"
           height="987"

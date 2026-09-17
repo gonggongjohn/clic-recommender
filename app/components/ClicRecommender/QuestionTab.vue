@@ -114,7 +114,7 @@ const rate = async (value: number) => {
 
   // Keep the existing Teams notification behavior while persisting the
   // normalized analytics event separately. Either failure is non-fatal.
-  const notification = $fetch(`/api/rating`, {
+  const notification = $fetch(apiUrl("/api/rating"), {
     method: "POST",
     body: {
       search: searchQuery.value,

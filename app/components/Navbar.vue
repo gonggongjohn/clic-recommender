@@ -21,7 +21,7 @@
       target="_blank"
     >
       <NuxtImg
-        src="/Logo_markOnly.svg"
+        :src="publicAssetUrl('/Logo_markOnly.svg')"
         :alt="$t('title')"
         :title="$t('title')"
         width="85"

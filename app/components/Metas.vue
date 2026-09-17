@@ -5,5 +5,5 @@
   <Meta name="MobileOptimized" content="width"/>
   <Meta name="HanheldFriendly" content="true"/>
   <Meta name="robots" content="index, follow"/>
-  <Link rel="icon" href="/favicon.ico" />
+  <Link rel="icon" :href="publicAssetUrl('/favicon.ico')" />
 </template>

@@ -1,5 +1,66 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
+// ---------------------------------------------------------------------------
+// Sub-path hosting (base URL)
+// ---------------------------------------------------------------------------
+// Both deployments are reached through a shared domain that routes by path
+// prefix rather than by hostname:
+//
+//   https://<shared-domain>/recommender/      -> original Static Web App
+//   https://<shared-domain>/recommender-cle/  -> course Static Web App
+//
+// Everything the browser asks for therefore carries that prefix, so the app has
+// to be built knowing it: `app.baseURL` is what makes Nuxt emit
+// /recommender/_nuxt/*.js instead of /_nuxt/*.js, and what makes the Nitro
+// handler answer on the prefixed paths. Without it the HTML loads but every CSS
+// and JS request 404s, which is the symptom this block fixes.
+//
+// IMPORTANT: this is a BUILD-TIME value. The azure-swa preset bakes it into the
+// output layout (`.output/public/<baseURL>/...`) and into the generated HTML, so
+// the variable must be present in the build job (the GitHub Actions workflow /
+// Oryx build), not only in the Static Web App application settings. Setting it
+// in both places is correct and harmless; see BASE_PATH.md.
+//
+// Resolution order:
+//   1. NUXT_APP_BASE_URL / SITE_BASE_URL / BASE_URL - explicit override
+//   2. the per-site default below, keyed by SITE_ID
+//   3. "/recommender/"                              - the default site's prefix
+//
+// NUXT_APP_BASE_URL is Nuxt's own name for this setting and is also read back
+// at runtime, so prefer it; the other two are accepted as conveniences.
+const siteId = (process.env.NUXT_PUBLIC_SITE_ID ?? process.env.SITE_ID ?? "main")
+  .trim()
+  .toLowerCase();
+
+/** Default base path per deployment. Override with NUXT_APP_BASE_URL/BASE_URL. */
+const SITE_BASE_URLS: Record<string, string> = {
+  main: "/recommender/",
+  course: "/recommender-cle/",
+};
+
+/**
+ * Nuxt wants a base URL with a leading *and* trailing slash ("/recommender/").
+ * Accept the forgiving spellings an operator is likely to type into the portal
+ * ("recommender", "/recommender") and normalise them, so a missing slash cannot
+ * quietly break every asset URL again.
+ */
+const normalizeBaseURL = (value?: string | null): string | undefined => {
+  const raw = String(value ?? "").trim();
+  if (!raw) return undefined;
+
+  const path = `/${raw}/`.replace(/\/{2,}/g, "/");
+  return path;
+};
+
+const baseURL =
+  normalizeBaseURL(
+    process.env.NUXT_APP_BASE_URL ??
+      process.env.SITE_BASE_URL ??
+      process.env.BASE_URL
+  ) ??
+  SITE_BASE_URLS[siteId] ??
+  SITE_BASE_URLS.main!;
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
@@ -8,6 +69,16 @@ export default defineNuxtConfig({
   },
 
   app: {
+    // Resolved above from NUXT_APP_BASE_URL / BASE_URL / SITE_ID.
+    baseURL,
+    // Made explicit so the asset prefix is visible next to the base path; this
+    // is the Nuxt default and the two are joined as <baseURL><buildAssetsDir>,
+    // e.g. /recommender/_nuxt/entry.[hash].js.
+    buildAssetsDir: "/_nuxt/",
+    // Only needed if the built assets are ever fronted by a CDN on a different
+    // origin. Empty means "serve them from this site, under baseURL".
+    cdnURL: process.env.NUXT_APP_CDN_URL ?? "",
+
     head: {
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
@@ -109,6 +180,26 @@ export default defineNuxtConfig({
         platform: {
           apiRuntime: "node:22",
         },
+        navigationFallback: {
+          // Anything that is not a file on disk goes to the Nitro function,
+          // which now answers on the prefixed paths because of `app.baseURL`.
+          rewrite: "/api/server",
+          // ...except the hashed build assets. Without this exclusion a stale
+          // or mistyped /_nuxt/* URL is answered with the HTML shell, and the
+          // browser reports a confusing MIME-type error ("Expected a
+          // JavaScript module but the server responded with text/html")
+          // instead of a plain 404 that points straight at the real problem.
+          exclude: [`${baseURL}_nuxt/*`],
+        },
+        routes: [
+          // The Static Web App's own *.azurestaticapps.net hostname serves the
+          // site at the root, where nothing is mounted any more. Send it to the
+          // prefix so the direct URL keeps working for smoke tests.
+          {
+            route: "/",
+            redirect: baseURL,
+          },
+        ],
       },
     },
   },

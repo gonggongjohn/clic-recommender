@@ -57,6 +57,9 @@ export const useEventLogger = () => {
   const runtimeConfig = useRuntimeConfig();
   const { collect: collectDeviceInfo } = useDeviceInfo();
 
+  /** Nitro route, under this deployment's base path (e.g. /recommender/api/events). */
+  const eventsEndpoint = apiUrl("/api/events");
+
   /**
    * Whether this deployment attaches a device profile to its events.
    *
@@ -116,7 +119,7 @@ export const useEventLogger = () => {
       const device =
         deviceTelemetryEnabled && import.meta.client ? collectDeviceInfo() : null;
 
-      await $fetch("/api/events", {
+      await $fetch(eventsEndpoint, {
         method: "POST",
         body: {
           schema_version: 1,
