@@ -52,14 +52,35 @@ const normalizeBaseURL = (value?: string | null): string | undefined => {
   return path;
 };
 
+// Every candidate goes through the normaliser, including the built-in defaults.
+//
+// It used to be applied only to the environment variables, so with no override
+// set `baseURL` was the raw table value "/recommender-cle" - no trailing slash.
+// Nuxt itself survives that (it normalises at runtime and joins with joinURL),
+// which is why the site looked fine, but every `${baseURL}x` template literal
+// in this file silently produced a wrong path:
+//
+//   `${baseURL}api/*`   -> "/recommender-cleapi/*"    (route rule matched nothing)
+//   `${baseURL}_nuxt/*` -> "/recommender-cle_nuxt/*"  (exclusion never applied)
+//
+// Keep the trailing slash guaranteed here rather than remembering to add it at
+// each interpolation.
 const baseURL =
   normalizeBaseURL(
     process.env.NUXT_APP_BASE_URL ??
       process.env.SITE_BASE_URL ??
-      process.env.BASE_URL
-  ) ??
-  SITE_BASE_URLS[siteId] ??
-  SITE_BASE_URLS.main!;
+      process.env.BASE_URL ??
+      SITE_BASE_URLS[siteId] ??
+      SITE_BASE_URLS.main
+  ) ?? "/";
+
+// Cheap insurance: this bug cost an afternoon of chasing 405s and it is
+// invisible at runtime, so fail the build instead of shipping bad routes.
+if (!baseURL.startsWith("/") || !baseURL.endsWith("/")) {
+  throw new Error(
+    `[nuxt.config] baseURL must have a leading and trailing slash, got "${baseURL}"`
+  );
+}
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -218,30 +239,36 @@ export default defineNuxtConfig({
           exclude: [`${baseURL}_nuxt/*`],
         },
         routes: [
-          // NOTE - do not try to fix POST routing here. It cannot be done.
+          // Non-GET requests to the Nitro routes.
           //
-          // Static Web Apps serves non-GET requests ONLY on the reserved /api/*
-          // prefix. Every other path is handled by the static content service,
-          // which answers GET, HEAD and OPTIONS and returns
-          // `405 Allow: GET, HEAD, OPTIONS` for anything else - before route
-          // rules or `navigationFallback` are consulted. A `routes` entry that
-          // rewrites `<baseURL>api/*` into the Functions host with `methods`
-          // listing every verb does NOT lift the restriction; it was tried and
-          // the POST still 405s. See Azure/static-web-apps#1132, where the same
-          // handler answers POST at /api/hello and 405s at /hello.
+          // `navigationFallback` is the fallback of the *static content*
+          // service, which serves GET, HEAD and OPTIONS only - so once the app
+          // moved under `<baseURL>`, the API moved with it to `<baseURL>api/*`
+          // and every POST was answered with `405 Allow: GET, HEAD, OPTIONS`
+          // before any handler ran. A `routes` rule is the only thing that can
+          // hand a non-GET request to the Functions host.
           //
-          // So once the app moved under `<baseURL>`, its API routes moved to
-          // `<baseURL>api/*` and became GET-only:
+          // Azure forwards the pre-rewrite URL in `x-ms-original-url`, which
+          // Nitro's azure-swa entry reads, so the handler still sees the
+          // prefixed path.
           //
-          //   GET  <baseURL>api/warmup -> content service -> navigationFallback
-          //                               -> /api/server -> Nitro          200
-          //   POST <baseURL>api/search -> content service, non-GET           405
-          //
-          // The fix is at the edge plus `routeRules` below: the domain rewrites
-          // <domain><baseURL>api/<x> to <swa>/api/_proxied/<x>, which lands on
-          // the reserved prefix where every verb is allowed, and `routeRules`
-          // puts the base path back on inside Nitro.
-          //
+          // Whether this is sufficient is what the current deploy tests. Azure
+          // may restrict non-GET to the literal /api/* prefix regardless of
+          // route rules (Azure/static-web-apps#1132); if so, this rule cannot
+          // help and the `routeRules` fallback above is the route to use.
+          {
+            route: `${baseURL}api/*`,
+            methods: [
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE",
+            ],
+            rewrite: "/api/server",
+          },
           // The Static Web App's own *.azurestaticapps.net hostname serves the
           // site at the root, where nothing is mounted any more. Send it to the
           // prefix so the direct URL keeps working for smoke tests.
