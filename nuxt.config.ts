@@ -171,8 +171,38 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    // ---------------------------------------------------------------------
+    // The only door into this app that accepts POST
+    // ---------------------------------------------------------------------
+    // Static Web Apps allows non-GET requests on /api/* and nowhere else (see
+    // the long note in `azure.config.routes`). The API calls therefore have to
+    // arrive at the Static Web App addressed to /api/..., while the handlers
+    // themselves live under `<baseURL>api/...` because of `app.baseURL`. This
+    // rule bridges the two:
+    //
+    //   browser   POST <domain>/recommender-cle/api/search
+    //   edge      rewrite to <swa>/api/_proxied/search   (reserved prefix: OK)
+    //   Nitro     /api/_proxied/search -> /recommender-cle/api/search -> handler
+    //
+    // `_proxied` is not decoration. Route rules are matched against the path
+    // with `app.baseURL` stripped off, so a rule keyed on `/api/**` would also
+    // match its own target (`/recommender-cle/api/search` strips to
+    // `/api/search`) and proxy to itself forever. The extra segment is what
+    // makes the two paths distinguishable.
+    //
+    // A `/**` key makes Nitro strip the key's prefix before joining, so
+    // /api/_proxied/<x> maps to <baseURL>api/<x> for any <x>, and the method,
+    // headers and body are forwarded untouched.
+    routeRules: {
+      "/api/_proxied/**": { proxy: `${baseURL}api/**` },
+    },
+
     azure: {
       config: {
+        // Nitro's azure-swa preset only recognises the literal strings "16",
+        // "18" and "20" in package.json `engines.node`; anything else (such as
+        // "22.x") silently falls back to `node:18`, which Azure Static Web Apps
+        // retired on 31 May 2025. Set the API runtime explicitly instead.
         platform: {
           apiRuntime: "node:22",
         },
@@ -188,19 +218,33 @@ export default defineNuxtConfig({
           exclude: [`${baseURL}_nuxt/*`],
         },
         routes: [
-          {
-            route: `${baseURL}api/*`,
-            methods: [
-              "GET",
-              "HEAD",
-              "OPTIONS",
-              "POST",
-              "PUT",
-              "PATCH",
-              "DELETE",
-            ],
-            rewrite: "/api/server",
-          },
+          // NOTE - do not try to fix POST routing here. It cannot be done.
+          //
+          // Static Web Apps serves non-GET requests ONLY on the reserved /api/*
+          // prefix. Every other path is handled by the static content service,
+          // which answers GET, HEAD and OPTIONS and returns
+          // `405 Allow: GET, HEAD, OPTIONS` for anything else - before route
+          // rules or `navigationFallback` are consulted. A `routes` entry that
+          // rewrites `<baseURL>api/*` into the Functions host with `methods`
+          // listing every verb does NOT lift the restriction; it was tried and
+          // the POST still 405s. See Azure/static-web-apps#1132, where the same
+          // handler answers POST at /api/hello and 405s at /hello.
+          //
+          // So once the app moved under `<baseURL>`, its API routes moved to
+          // `<baseURL>api/*` and became GET-only:
+          //
+          //   GET  <baseURL>api/warmup -> content service -> navigationFallback
+          //                               -> /api/server -> Nitro          200
+          //   POST <baseURL>api/search -> content service, non-GET           405
+          //
+          // The fix is at the edge plus `routeRules` below: the domain rewrites
+          // <domain><baseURL>api/<x> to <swa>/api/_proxied/<x>, which lands on
+          // the reserved prefix where every verb is allowed, and `routeRules`
+          // puts the base path back on inside Nitro.
+          //
+          // The Static Web App's own *.azurestaticapps.net hostname serves the
+          // site at the root, where nothing is mounted any more. Send it to the
+          // prefix so the direct URL keeps working for smoke tests.
           {
             route: "/",
             redirect: baseURL,
@@ -217,6 +261,25 @@ export default defineNuxtConfig({
   ],
 
   image: {
+    // Why "none":
+    //
+    // @nuxt/image's default `ipx` provider rewrites <NuxtImg> to
+    // /_ipx/w_85/Logo_markOnly.svg and resizes on demand inside the Nitro
+    // server. IPX reads the source file from disk at `ipx.fs.dir`, which
+    // Nitro hard-codes to "../../public" relative to the built nitro chunk.
+    //
+    //   node-server preset -> .output/server/chunks/nitro/ + ../../public
+    //                         = .output/public            -> EXISTS  (200)
+    //   azure-swa preset   -> .output/server/functions/chunks/nitro/ + ../../public
+    //                         = .output/server/functions/public -> MISSING (404)
+    //
+    // On Azure Static Web Apps the public folder is uploaded to the static
+    // CDN and is NOT copied into the Functions bundle, so every /_ipx/**
+    // request 404s. That is why the logos break only after deployment.
+    //
+    // These three images are fixed-size brand assets (an SVG, an .ico and a
+    // small PNG) with nothing to gain from runtime resizing, so serve them
+    // straight from the CDN. <NuxtImg> now emits <img src="/Logo_markOnly.svg">.
     provider: "none",
   },
 
