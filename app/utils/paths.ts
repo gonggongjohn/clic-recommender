@@ -52,12 +52,77 @@ export const publicAssetUrl = (path: string): string => {
 };
 
 /**
+ * Where this app's own Nitro routes are reachable FROM THE CURRENT HOSTNAME.
+ *
+ * There are two answers, because Azure Static Web Apps serves non-GET requests
+ * only on its reserved /api/* prefix. Anything else is handled by the static
+ * content service, which answers GET, HEAD and OPTIONS and returns
+ * `405 Allow: GET, HEAD, OPTIONS` for a POST. Mounting the app under
+ * `app.baseURL` moved its routes to `<baseURL>api/*`, i.e. off that prefix.
+ *
+ *   prefixed  <baseURL>api        e.g. /recommender-cle/api
+ *             The only path the shared domain routes to this deployment, since
+ *             it dispatches on the `/recommender-cle` prefix. POSTs work
+ *             because the domain rewrites them onto the direct form below
+ *             (see EDGE-ROUTING.md) - or, if Azure honours the `routes` rewrite
+ *             in nuxt.config.ts, directly.
+ *
+ *   direct    /api<baseURL>       e.g. /api/recommender-cle
+ *             On the reserved prefix, so every verb is accepted with no rewrite
+ *             anywhere. `routeRules` in nuxt.config.ts maps it back onto
+ *             <baseURL>api/* inside Nitro. Used when the site is opened on its
+ *             *.azurestaticapps.net hostname, which has no edge in front of it.
+ *
+ * The same deployment answers on both hostnames, so this cannot be a build-time
+ * flag - it is decided per request, in the browser. `NUXT_PUBLIC_API_BASE`
+ * overrides it: "direct", "prefixed", or an explicit path such as
+ * "/api/recommender-cle" (useful if the app later gets its own custom domain
+ * pointing straight at the Static Web App).
+ */
+export const apiBasePath = (): string => {
+  const base = appBasePath();
+  const prefixed = joinURL(base, "/api");
+
+  // No sub-path means the routes already sit on the reserved prefix.
+  if (base === "/") return prefixed;
+
+  const direct = joinURL("/api", base);
+  const mode = String(
+    (useRuntimeConfig().public as { API_BASE?: string })?.API_BASE ?? "auto"
+  )
+    .trim()
+    .toLowerCase();
+
+  if (mode === "prefixed") return prefixed;
+  if (mode === "direct") return direct;
+  if (mode.startsWith("/")) return mode;
+
+  // Auto. Only the browser knows which hostname the visitor actually typed:
+  // the reverse proxy in front of the shared domain rewrites the Host header,
+  // so a server-side guess would be wrong. SSR therefore answers "prefixed",
+  // which is what the edge expects; nothing calls an API route during SSR.
+  if (!import.meta.client) return prefixed;
+
+  return /\.azurestaticapps\.net$/i.test(window.location.hostname)
+    ? direct
+    : prefixed;
+};
+
+/**
  * URL for one of this app's own Nitro routes.
  *
- *   apiUrl("/api/search") -> "/recommender/api/search"
+ *   apiUrl("/api/search") -> "/recommender-cle/api/search"  (shared domain)
+ *                         -> "/api/recommender-cle/search"  (*.azurestaticapps.net)
+ *
+ * Call sites keep passing the handler's own path, "/api/<name>"; the "/api"
+ * segment is supplied by the base, so it is stripped here before joining.
  */
 export const apiUrl = (path: string): string => {
   if (!path || hasProtocol(path)) return path;
 
-  return joinURL(appBasePath(), path);
+  const route = /^\/api(?=\/|$)(.*)$/.exec(path);
+  // Not an API route after all - treat it as a plain in-app path.
+  if (!route) return joinURL(appBasePath(), path);
+
+  return joinURL(apiBasePath(), route[1] || "/");
 };

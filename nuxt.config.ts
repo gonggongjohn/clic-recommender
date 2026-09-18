@@ -144,6 +144,18 @@ export default defineNuxtConfig({
     // re-pinging. Only the server route reads this.
     warmupTimeoutMs: process.env.WARMUP_TIMEOUT_MS ?? "20000",
     public: {
+      // Which form of the API path the browser should call:
+      //
+      //   "auto"      (default) prefixed on the shared domain, direct on the
+      //               Static Web App's own *.azurestaticapps.net hostname
+      //   "prefixed"  always <baseURL>api/...      e.g. /recommender-cle/api/search
+      //   "direct"    always /api<baseURL>...      e.g. /api/recommender-cle/search
+      //   "/some/path" an explicit base, for a custom domain that points
+      //               straight at the Static Web App with no path prefix
+      //
+      // See `apiBasePath()` in app/utils/paths.ts. This is deliberately runtime
+      // rather than build-time: one deployment answers on both hostnames.
+      API_BASE: process.env.API_BASE ?? "auto",
       // Exposed so the client can tag events; the server route re-stamps the
       // value from `siteId` above before forwarding, so this is a hint only.
       SITE_ID: process.env.SITE_ID ?? "main",
@@ -193,30 +205,35 @@ export default defineNuxtConfig({
 
   nitro: {
     // ---------------------------------------------------------------------
-    // The only door into this app that accepts POST
+    // The door into this app that always accepts POST
     // ---------------------------------------------------------------------
-    // Static Web Apps allows non-GET requests on /api/* and nowhere else (see
-    // the long note in `azure.config.routes`). The API calls therefore have to
-    // arrive at the Static Web App addressed to /api/..., while the handlers
-    // themselves live under `<baseURL>api/...` because of `app.baseURL`. This
-    // rule bridges the two:
+    // Static Web Apps allows non-GET requests on /api/* and nowhere else, so an
+    // app mounted under `<baseURL>` has its routes on a GET-only path. This
+    // rule exposes the same handlers on the reserved prefix, with the base path
+    // moved inside it:
     //
-    //   browser   POST <domain>/recommender-cle/api/search
-    //   edge      rewrite to <swa>/api/_proxied/search   (reserved prefix: OK)
-    //   Nitro     /api/_proxied/search -> /recommender-cle/api/search -> handler
+    //   /api/recommender-cle/search  ->  /recommender-cle/api/search
     //
-    // `_proxied` is not decoration. Route rules are matched against the path
-    // with `app.baseURL` stripped off, so a rule keyed on `/api/**` would also
-    // match its own target (`/recommender-cle/api/search` strips to
-    // `/api/search`) and proxy to itself forever. The extra segment is what
-    // makes the two paths distinguishable.
+    // On *.azurestaticapps.net the client calls that form directly (see
+    // `apiBasePath()` in app/utils/paths.ts), so POST works with no rewrite in
+    // front of the site. On the shared domain the edge rewrites
+    // <domain>/recommender-cle/api/<x> to this same path, so both hostnames end
+    // up in one code path.
     //
-    // A `/**` key makes Nitro strip the key's prefix before joining, so
-    // /api/_proxied/<x> maps to <baseURL>api/<x> for any <x>, and the method,
-    // headers and body are forwarded untouched.
-    routeRules: {
-      "/api/_proxied/**": { proxy: `${baseURL}api/**` },
-    },
+    // Why the base path is repeated inside the prefix rather than a plain
+    // `/api/**`: route rules are matched against the path with `app.baseURL`
+    // stripped off, so `/api/**` would also match its own target
+    // (`/recommender-cle/api/search` strips to `/api/search`) and proxy to
+    // itself forever. `/api/recommender-cle/**` cannot collide with it, and it
+    // stays unique per deployment - which also lets the shared domain route the
+    // two sites apart if you ever prefer routing over rewriting.
+    //
+    // A `/**` key makes Nitro strip the key's prefix before joining, so any
+    // <x> maps through, with method, headers and body forwarded untouched.
+    routeRules:
+      baseURL === "/"
+        ? {}
+        : { [`/api${baseURL}**`]: { proxy: `${baseURL}api/**` } },
 
     azure: {
       config: {
