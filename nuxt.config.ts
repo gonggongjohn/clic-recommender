@@ -138,6 +138,14 @@ export default defineNuxtConfig({
     // frontends, which is what lets it trust the forwarded client IP. Server
     // side only: never place this under `public`.
     analyticsIngestKey: process.env.ANALYTICS_INGEST_KEY ?? "",
+    // Shared secret proving a request really came through our own reverse
+    // proxy, which is the only hop that still sees the visitor's address once
+    // the shared domain is in front of the site. Set it to the same value in
+    // the Apache vhost (`RequestHeader set X-Edge-Proxy-Key`) and in the Static
+    // Web App settings. Leave it unset and the edge headers are ignored, which
+    // is the correct behaviour for a site reached directly.
+    // Server side only: never place this under `public`.
+    edgeProxyKey: process.env.EDGE_PROXY_KEY ?? "",
     // How long /api/warmup holds the connection open waiting for a cold
     // Container App replica to answer. Long on purpose: the browser never
     // awaits this call, and the reply is how the client learns it can stop
