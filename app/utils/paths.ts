@@ -111,11 +111,28 @@ export const apiBasePath = (): string => {
 /**
  * URL for one of this app's own Nitro routes.
  *
- *   apiUrl("/api/search") -> "/recommender-cle/api/search"  (shared domain)
- *                         -> "/api/recommender-cle/search"  (*.azurestaticapps.net)
+ *   apiUrl("/api/search") -> "/recommender-cle/api/search"           (shared domain)
+ *                         -> "https://<host>/api/recommender-cle/search"
+ *                                                            (*.azurestaticapps.net)
  *
  * Call sites keep passing the handler's own path, "/api/<name>"; the "/api"
  * segment is supplied by the base, so it is stripped here before joining.
+ *
+ * Why the direct form comes back absolute
+ * ---------------------------------------
+ * Every call site uses Nuxt's `$fetch`, which is created with
+ * `baseURL: app.baseURL` and puts the base back on with ufo's `withBase()`.
+ * That helper leaves a path alone only when it ALREADY starts with the base:
+ *
+ *   "/recommender-cle/api/search"  starts with the base -> untouched
+ *   "/api/recommender-cle/search"  does not             -> "/recommender-cle" + it
+ *
+ * which is how a perfectly correct direct path turned into
+ * /recommender-cle/api/recommender-cle/search on the wire. `withBase()` also
+ * returns the input untouched when it has a protocol, so making the direct form
+ * absolute is what keeps `$fetch` from prefixing it - and it stays same-origin,
+ * so nothing about CORS or cookies changes. Fixing it here rather than passing
+ * `baseURL: ""` at each call site means a new call site cannot reintroduce it.
  */
 export const apiUrl = (path: string): string => {
   if (!path || hasProtocol(path)) return path;
@@ -124,5 +141,13 @@ export const apiUrl = (path: string): string => {
   // Not an API route after all - treat it as a plain in-app path.
   if (!route) return joinURL(appBasePath(), path);
 
-  return joinURL(apiBasePath(), route[1] || "/");
+  const url = joinURL(apiBasePath(), route[1] || "/");
+
+  // Only the direct form needs the origin; the prefixed form already starts
+  // with the base, so `$fetch` leaves it alone and it stays readable.
+  if (import.meta.client && !url.startsWith(appBasePath())) {
+    return joinURL(window.location.origin, url);
+  }
+
+  return url;
 };
